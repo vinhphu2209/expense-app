@@ -112,7 +112,15 @@ Runs when the user taps **"Close month"**:
 
 Split ratios and destinations come from `settings`, never hard-coded. A month can only be closed once.
 
-**Emergency target** = 6 months of expenses ([#3](https://github.com/vinhphu2209/expense-app/issues/3)). The amount changes over time, so it is computed, not stored as a fixed number. The exact formula (which months, which envelopes count as "expenses") is still open in #3 and must be decided before P2-02.
+**Emergency target** = 6 months of essential expenses ([#3](https://github.com/vinhphu2209/expense-app/issues/3)):
+
+```text
+emergency_target(month) = 6 × Σ assigned_amount of the envelopes in the "Fixed Expenses" and "Living Expenses" groups, for the month being closed
+```
+
+- Computed at close time, never stored as a fixed number. Emergency's own `target_amount` is not used.
+- Uses **planned** amounts (`assigned_amount`), not actual spending, so it works from the first month and stays stable within a month.
+- The multiplier (6) and the set of essential groups come from `settings` (referenced by group id, not name), never hard-coded.
 
 ### 3.6 Income: Gross → Net
 
@@ -418,7 +426,7 @@ Goal: make logging happen *right after* paying in MoMo, without leaving the PWA-
    - `Emergency Fund`, `EmergencyFund` → Emergency
    - `Investment`, `InvestmentFund` → Investment
    - `Family`, `FamilyFund` → Family
-   - `ML` → **dropped**: no envelope is created and its September amounts are not imported ([#1](https://github.com/vinhphu2209/expense-app/issues/1)). September reconciliation excludes `ML`.
+   - `ML` → Dating ([#1](https://github.com/vinhphu2209/expense-app/issues/1)). Its September amounts are imported into Dating, so September totals still match the sheet.
    - The numbers in the sheet's notes column are **not imported** ([#2](https://github.com/vinhphu2209/expense-app/issues/2)).
 3. Each month × envelope with Actual > 0 → one transaction `source=import`, `occurred_at` = last day of month, note "Imported from sheet".
 4. Budget lines from the Allocation % / Planned columns.
@@ -436,9 +444,9 @@ The canonical checklist lives in [pull requests §7](conventions/pull-requests.m
 
 Each question becomes an issue labelled `needs-decision`. Product rules are answered in this file; decisions with lasting architectural impact also get an ADR.
 
-1. ~~`ML` envelope~~ → dropped, not imported ([#1](https://github.com/vinhphu2209/expense-app/issues/1)).
+1. ~~`ML` envelope~~ → merged into Dating via alias ([#1](https://github.com/vinhphu2209/expense-app/issues/1)).
 2. ~~Sheet note numbers as fund targets~~ → no meaning, not imported; targets are set in Settings ([#2](https://github.com/vinhphu2209/expense-app/issues/2)).
-3. Emergency target → **6 months of expenses**. Still open: the exact formula ([#3](https://github.com/vinhphu2209/expense-app/issues/3)).
+3. ~~Emergency target~~ → 6 × planned Fixed + Living expenses of the month being closed (§3.5, [#3](https://github.com/vinhphu2209/expense-app/issues/3)).
 4. ~~Budget income~~ → Net ([#4](https://github.com/vinhphu2209/expense-app/issues/4)).
 5. ~~Primary phone~~ → iPhone ([ADR-0009](adr/0009-iphone-primary-device.md)).
 6. ~~Primary bank~~ → not tracked; MoMo only ([ADR-0010](adr/0010-track-momo-only.md)).
