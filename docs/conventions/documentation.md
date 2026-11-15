@@ -54,7 +54,8 @@ stateDiagram-v2
   Accepted --> Deprecated: no longer relevant
 ```
 
-- An agent writes an ADR with status **Proposed** in its PR. It becomes **Accepted** when Claude Code merges the PR under [pull requests §6](pull-requests.md#6-merge-rules). An ADR that records a business rule needs Phú's answer on a `needs-decision` question first.
+- An ADR that records a decision **already made** (by Phú for business/process, or by Claude Code for technical matters under ADR-0017) is written with status **Accepted**; it takes effect when its PR is merged under [pull requests §6](pull-requests.md#6-merge-rules).
+- An ADR whose decision is still open is written as **Proposed** and its question is labelled `needs-decision`. It is set to **Accepted** in the same PR once the decision is made.
 - ADRs are immutable once accepted. To change a decision, write a new ADR with `Supersedes: ADR-NNNN` and set the old one's status to `Superseded by ADR-MMMM`. Changing only the status line of the old ADR is the one allowed edit.
 - Numbers are never reused, including for rejected ADRs.
 

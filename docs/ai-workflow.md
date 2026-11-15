@@ -20,7 +20,7 @@
 | | **Claude Code** (VS Code) | **Antigravity** | **Phú** |
 | --- | --- | --- | --- |
 | Main role | **Tech lead** (ADR-0017): architect, DB, domain/money logic, server, security, code reviewer | Frontend/UI, PWA, browser verification | Product owner |
-| Does | Schema, migrations, RLS, views, server actions, Zod, unit/integration/pgTAP tests, month-close engine, `/api/ingest`, CI workflows, iOS Shortcut docs. Prioritises issues, approves Antigravity's plans, merges PRs (`/merge`), cuts releases | Screens, components, PWA (manifest, service worker, offline queue, safe areas), e2e tests, screenshots | Business rules (`needs-decision`), information only he has, accounts/secrets, starting Antigravity sessions |
+| Does | Schema, migrations, RLS, views, server actions, Zod, unit/integration/pgTAP tests, month-close engine, `/api/ingest`, CI workflows, iOS Shortcut docs. Prioritises issues, approves Antigravity's plans, merges PRs (`/merge`), cuts releases | Screens, components, PWA (manifest, service worker, offline queue, safe areas), e2e tests, screenshots | Only the items in the [ADR-0017](adr/0017-claude-code-as-tech-lead.md) table: business rules (`needs-decision`), information only he has, accounts/secrets, destructive changes to real data, starting Antigravity sessions |
 | Reviews | Antigravity's PRs (`/review-ag`). Its own PRs are reviewed by a fresh-context reviewer subagent (+ `money-logic-reviewer` for money/DB) | Claude Code's PRs by **running the app** (`/verify-ui`) when the change is visible in the app | Releases: UAT acceptance on his iPhone, then production deployment approval |
 | Does not | Large UI redesigns without agreement | Edit DB, domain, server or auth code | — |
 

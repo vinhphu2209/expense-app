@@ -167,7 +167,7 @@ If a `release/*` branch is open, also back-merge the hotfix into that release br
 | --- | --- | --- |
 | short-lived → `develop` / `release/*` | Squash | One commit per issue on `develop`; the PR title becomes the commit message, so `develop` reads like a changelog. |
 | `release/*` / `hotfix/*` → `main` | Merge commit | Keeps the release as one visible unit on `main`, and keeps commit SHAs identical so back-merging is conflict-free. |
-| `main` → `develop` back-merge | Merge commit | Brings the version bump + hotfixes back without rewriting history. |
+| Back-merge `main` → `develop` (or a hotfix → open `release/*`) | Merge commit | Brings the version bump + hotfixes back without rewriting history. |
 
 Rebase-merge is disabled in repo settings.
 

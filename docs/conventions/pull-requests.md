@@ -62,7 +62,7 @@ Do not put the issue number in the title. Put `Closes #14` in the description.
 | `supabase/migrations/**`, RLS, auth, API tokens | `money-logic-reviewer` subagent | Destructive changes to real data: `needs-decision` |
 | Docs, ADRs, conventions | Fresh-context reviewer subagent | Rule changes summarised to Phú in chat |
 | `release/*`, `hotfix/*` into `main` | Reviewer subagent | Phú's UAT acceptance comment on the PR; Phú approves the production deployment |
-| Back-merge `main` → `develop` | — (exempt when conflict-free) | A back-merge with conflicts needs the reviewer subagent |
+| Back-merge (`main` or `chore/back-merge-*` → `develop` or `release/*`) | — (exempt when conflict-free) | A back-merge with conflicts needs the reviewer subagent |
 
 **Claude Code merges** (tech lead, [ADR-0017](../adr/0017-claude-code-as-tech-lead.md)). It never merges its own PR without an independent reviewer's `APPROVE` / `APPROVE WITH NITS`.
 
@@ -124,7 +124,7 @@ A PR may be merged only when **all** of these are true:
 
 `/merge <pr>` (`.claude/commands/merge.md`) checks exactly this list.
 
-Merge method depends on the target ([branching §5](branching.md#5-merge-methods-why-they-differ)). With squash, the squash commit message is the PR title plus `Closes #<issue>` and the `Co-Authored-By` trailers.
+Merge method depends on the target ([branching §5](branching.md#5-merge-methods-why-they-differ)). With squash, the squash commit message is the PR title plus `Closes #<issue>` and the `Co-Authored-By` / `Assisted-by` trailers.
 
 After merge: the issue closes automatically and the Project card moves to *Done*. The other agent's worktree runs `git rebase origin/develop` before continuing.
 
