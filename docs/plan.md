@@ -347,7 +347,9 @@ Owner key: **CC** = Claude Code (VS Code), **AG** = Antigravity, **P** = Phú. O
 | P0-03 | Migrations for §4 schema + RLS on every table | CC | Test: user A cannot read user B's data |
 | P0-04 | Generate DB types → `src/lib/db.types.ts`; domain types + Zod schemas in `src/lib/domain/` | CC | This is the **contract** for UI; AG imports it, never redefines |
 | P0-05 | Seed: groups, envelopes, aliases, accounts (MoMo default, Cash, Shopee Later) from the November template | CC | Seed is idempotent |
-| P0-06 | Auth + mobile app shell + bottom nav; session persists in installed PWA | AG | Can log in on a real iPhone from the Home Screen icon and stay logged in after closing the app |
+| P0-06 | Auth + mobile app shell + bottom nav; session persists in installed PWA (parent of 06a/06b) | CC + AG | Can log in on a real iPhone from the Home Screen icon and stay logged in after closing the app |
+| P0-06a | Supabase auth clients (`src/lib/supabase/`), `src/middleware.ts`, magic-link callback route | CC | Session persists in the installed PWA; unauthenticated `(app)` routes redirect to login |
+| P0-06b | Login screen, app shell, bottom nav (on top of P0-06a) | AG | Works at 390×844 with safe areas; screenshots attached |
 | P0-07 | PWA manifest, icons (incl. `apple-touch-icon`), standalone mode, safe areas | AG | Add to Home Screen on iPhone opens full-screen with correct icon and status bar |
 
 ### Phase 1 — MVP that replaces the sheet (1–2 weeks)
@@ -388,7 +390,7 @@ Goal: make logging happen *right after* paying in MoMo, without leaving the PWA-
 | P3-01 | Offline queue for Quick-add (save locally when offline, sync with `client_id`) | AG | Airplane mode → save → reconnect → exactly one row |
 | P3-02 | Quick-add deep link: `/add?amount=45000&envelope=food&note=...` prefills and focuses Save | AG | Works from a Home Screen bookmark and from Shortcuts "Open URL" |
 | P3-03 | Personal API token (S8) + `POST /api/ingest` (token auth, Zod-validated, idempotent by `client_id`, lands in Inbox if envelope missing) | CC | Same request twice → one row; revoked token → 401 |
-| P3-04 | **iOS Shortcut "Log expense"**: asks amount + picks envelope → calls `/api/ingest`. Document setup steps in `docs/IOS_SHORTCUTS.md` | CC (API + doc) | Phú can log from the Shortcut / Siri / Action Button without opening the PWA |
+| P3-04 | **iOS Shortcut "Log expense"**: asks amount + picks envelope → calls `/api/ingest`. Document setup steps in `docs/guides/ios-shortcuts.md` | CC (API + doc) | Phú can log from the Shortcut / Siri / Action Button without opening the PWA |
 | P3-05 | **iOS Personal Automation**: "When MoMo is closed" → run "Log expense" (or open the deep link). Documented, optional | CC (doc) | Documented with screenshots; Phú tests on device |
 | P3-06 | Receipt-screenshot flow (optional): Shortcut takes a MoMo receipt screenshot → "Extract Text from Image" → sends raw text to `/api/ingest` → server parses amount/recipient → Inbox | CC | Parser tested on ≥ 10 real (redacted) MoMo receipts |
 | P3-07 | Suggest envelope from `categorize_rules` + **Inbox UI** to confirm pending items, create a rule from one item | CC (logic) + AG (UI) | |

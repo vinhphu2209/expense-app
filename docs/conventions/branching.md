@@ -188,12 +188,15 @@ Full details, secrets and caveats: [operations/environments.md](../operations/en
 
 ## 7. Repository settings that enforce this
 
-Configured in GitHub → Settings (record any change in the ADR log):
+Configured in GitHub → Settings (record any change in the ADR log). Current state as of 2026-11-15 (issue #6):
 
-- **Merge buttons:** allow *Squash* and *Merge commit*, disable *Rebase*. Squash commit message = "Pull request title and description".
+- **Default branch:** `develop` (new PRs target it by default).
+- **Merge buttons:** allow *Squash* and *Merge commit*, disable *Rebase*. Squash and merge commit message = PR title + description.
 - **Automatically delete head branches:** on.
-- **Ruleset `main`:** require PR; require status checks `ci / check`, `ci / pr-title`; block force pushes and deletion; allowed merge method = merge commit.
-- **Ruleset `develop`:** require PR; require status checks `ci / check`, `ci / pr-title`; block force pushes and deletion; allowed merge method = squash (merge commit allowed only for back-merges).
-- **Ruleset `release/**`, `hotfix/**`:** require PR for incoming changes; block force pushes.
-- **Tag ruleset `v*`:** only Phú can create; tags cannot be deleted or moved.
+- **Ruleset `main`:** require PR (all review threads resolved); block force pushes and deletion; allowed merge method = merge commit.
+- **Ruleset `develop`:** require PR (all review threads resolved); block force pushes and deletion; allowed merge methods = squash, merge commit (merge commit only for back-merges, by convention).
+- **Ruleset `release and hotfix`** (`release/**`, `hotfix/**`): block force pushes. Direct pushes are allowed so the version-bump commit can be made on the branch; fixes still arrive through `bugfix/` PRs by convention.
+- **Tag ruleset `version tags`** (`v*`): creation, update and deletion blocked for everyone except repository admins (Phú).
+- **Required status checks:** none yet. `ci / check` and `ci / pr-title` are added to the `main` and `develop` rulesets in P0-00b, when the CI workflow exists.
+- **Security:** secret scanning, push protection, Dependabot alerts + security updates, private vulnerability reporting: on.
 - **Required approvals: 0.** This is a solo repo: GitHub does not let an author approve their own PR, and both agents act through Phú's account. Review is enforced by the process in [pull-requests.md](pull-requests.md#5-review-process) instead.
