@@ -157,7 +157,14 @@ gh pr create --base main --title "fix(budget): month boundary in Asia/Ho_Chi_Min
 ```
 
 Then repeat steps 4–6 of §4.2: merge commit into `main` → tag `v0.2.1` → back-merge into `develop`.
-If a `release/*` branch is open, also back-merge the hotfix into that release branch.
+If a `release/*` branch is open, also back-merge the hotfix into that release branch:
+
+```bash
+git switch -c chore/back-merge-0.2.1-release main
+git push -u origin chore/back-merge-0.2.1-release
+gh pr create --base release/0.3.0 --title "chore(release): back-merge v0.2.1 into release/0.3.0" --body "Back-merge of hotfix v0.2.1."
+/merge <back-merge-pr>    # merge commit; exempt from review when conflict-free
+```
 
 ---
 
@@ -167,7 +174,7 @@ If a `release/*` branch is open, also back-merge the hotfix into that release br
 | --- | --- | --- |
 | short-lived → `develop` / `release/*` | Squash | One commit per issue on `develop`; the PR title becomes the commit message, so `develop` reads like a changelog. |
 | `release/*` / `hotfix/*` → `main` | Merge commit | Keeps the release as one visible unit on `main`, and keeps commit SHAs identical so back-merging is conflict-free. |
-| Back-merge `main` → `develop` (or a hotfix → open `release/*`) | Merge commit | Brings the version bump + hotfixes back without rewriting history. |
+| Back-merge (`main` or `chore/back-merge-*` → `develop` or `release/*`) | Merge commit | Brings the version bump + hotfixes back without rewriting history. |
 
 Rebase-merge is disabled in repo settings.
 
