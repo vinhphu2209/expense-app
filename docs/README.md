@@ -50,5 +50,5 @@ Every doc in this folder is listed here ([documentation conventions](conventions
 
 | Doc | Purpose |
 | --- | --- |
-| `guides/local-setup.md` | Planned (P0-01) |
+| [guides/local-setup.md](guides/local-setup.md) | Prerequisites, install, scripts, env vars, troubleshooting |
 | `guides/ios-shortcuts.md` | Planned (P3-04) |

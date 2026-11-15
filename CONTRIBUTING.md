@@ -20,7 +20,7 @@ This is a personal project built by one human (Phú) with two AI coding agents, 
 
 ## Local setup
 
-See `docs/guides/local-setup.md` (written in task P0-01).
+See [docs/guides/local-setup.md](docs/guides/local-setup.md).
 
 ## Public repo rules
 

@@ -2,7 +2,7 @@
 
 A personal expense-tracking **PWA for iPhone** that replaces a "Budget & Expense" Google Sheet: log a MoMo payment in under 5 seconds, budget with envelopes, track savings funds and BNPL debt, and automate the month-end allocation rule.
 
-> **Status:** Phase 0 — engineering foundation. No app code yet.
+> **Status:** Phase 0 — foundation. The app skeleton builds; features start in Phase 1.
 > Built by Phú with two AI coding agents (Claude Code and Antigravity) using a GitFlow + PR review process. See [how we work](#how-we-work).
 
 ## Tech stack
@@ -42,7 +42,14 @@ flowchart LR
 
 ## Getting started
 
-Local setup instructions will be added in task P0-01 (`docs/guides/local-setup.md`).
+```bash
+corepack enable && pnpm install
+cp .env.example .env.local
+pnpm dev      # http://localhost:3000
+pnpm check    # typecheck + lint + format + unit tests
+```
+
+Full guide: [docs/guides/local-setup.md](docs/guides/local-setup.md).
 
 ## License
 
