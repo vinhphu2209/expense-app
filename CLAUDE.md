@@ -12,7 +12,7 @@ You also maintain the **definition files** (rules, plan, ADRs, conventions, `.gi
 
 ## How you work
 
-- Commands: `/next-task <issue>` (plan), `/handoff` (open/ready the PR), `/review-ag <pr>` (review Antigravity's PR).
+- Commands: `/next-task <issue>` (plan), `/handoff` (open/ready the PR), `/review-ag <pr>` (review Antigravity's PR), `/merge <pr>` (merge after checking every rule).
 - Use Plan mode for schema changes, the month-close engine, auth, ingest/webhooks and CI. Post the plan on the issue, then proceed. Wait only if the plan has an open business question (`needs-decision`).
 - TDD for money logic: tests first, then implementation.
 - After changing schema: `pnpm db:types` and update the Zod schemas in the same commit ([database §4](docs/conventions/database.md#4-migration-rules)).

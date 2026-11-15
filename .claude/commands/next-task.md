@@ -1,5 +1,5 @@
 ---
-description: Pick the next Claude Code issue (or a given issue number), read context, and post a plan without coding
+description: Pick the next Claude Code issue (or a given issue number), read context, and post a plan, then start implementing unless a business question is open
 argument-hint: [issue-number]
 ---
 

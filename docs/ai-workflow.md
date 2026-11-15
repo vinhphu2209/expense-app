@@ -19,9 +19,9 @@
 
 | | **Claude Code** (VS Code) | **Antigravity** | **Phú** |
 | --- | --- | --- | --- |
-| Main role | Architect, DB, domain/money logic, server, security, code reviewer | Frontend/UI, PWA, browser verification | Product owner, approver, release manager |
-| Does | Schema, migrations, RLS, views, server actions, Zod, unit/integration/pgTAP tests, month-close engine, `/api/ingest`, CI workflows, iOS Shortcut docs | Screens, components, PWA (manifest, service worker, offline queue, safe areas), e2e tests, screenshots | Prioritises issues, approves plans, final review, merges, cuts releases, UAT on iPhone |
-| Reviews | Antigravity's PRs (`/review-ag`) | Claude Code's PRs by **running the app** (`/verify-ui`) | Every PR before merge |
+| Main role | **Tech lead** (ADR-0017): architect, DB, domain/money logic, server, security, code reviewer | Frontend/UI, PWA, browser verification | Product owner |
+| Does | Schema, migrations, RLS, views, server actions, Zod, unit/integration/pgTAP tests, month-close engine, `/api/ingest`, CI workflows, iOS Shortcut docs. Prioritises issues, approves Antigravity's plans, merges PRs (`/merge`), cuts releases | Screens, components, PWA (manifest, service worker, offline queue, safe areas), e2e tests, screenshots | Business rules (`needs-decision`), information only he has, accounts/secrets, starting Antigravity sessions |
+| Reviews | Antigravity's PRs (`/review-ag`). Its own PRs are reviewed by a fresh-context reviewer subagent (+ `money-logic-reviewer` for money/DB) | Claude Code's PRs by **running the app** (`/verify-ui`) when the change is visible in the app | Releases: UAT acceptance on his iPhone, then production deployment approval |
 | Does not | Large UI redesigns without agreement | Edit DB, domain, server or auth code | — |
 
 Path ownership: [files & folders §1.1](conventions/files-and-folders.md#11-ownership).
@@ -58,7 +58,7 @@ iOS PWA features (Add to Home Screen, standalone, Web Push) need HTTPS:
 
 ### 3.3 Claude Code
 
-- Commands: `/next-task <issue>`, `/handoff`, `/review-ag <pr>`.
+- Commands: `/next-task <issue>`, `/handoff`, `/review-ag <pr>`, `/merge <pr>`.
 - Subagent `money-logic-reviewer`: runs before `/handoff` on money/DB changes.
 - Plan mode for schema, month close, auth and CI work. `/clear` after each task.
 

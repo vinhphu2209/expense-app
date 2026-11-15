@@ -4,6 +4,7 @@
 - **Date:** 2026-11-15
 - **Deciders:** Phú
 - **Supersedes:** the file-based workflow (`docs/TASKS.md`, `docs/HANDOFF.md`, `docs/DECISIONS.md`)
+- **Amended by:** [ADR-0017](0017-claude-code-as-tech-lead.md) (plan approval and merging)
 - **Related:** [issues](../conventions/issues.md), [pull requests](../conventions/pull-requests.md)
 
 ## Context

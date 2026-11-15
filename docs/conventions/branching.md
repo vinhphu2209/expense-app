@@ -12,7 +12,7 @@ This repo uses **GitFlow**. Every change reaches `main` through a pull request, 
 | Branch | Purpose | Deploys to | Who merges into it | Protected |
 | --- | --- | --- | --- | --- |
 | `main` | Production. Every commit is a released version with a tag `vX.Y.Z`. | **prod** | Claude Code, only from `release/*` or `hotfix/*`, after Phú's UAT acceptance | Yes |
-| `develop` | Integration branch. Always deployable to UAT. | **uat** | Phú, from short-lived branches | Yes |
+| `develop` | Integration branch. Always deployable to UAT. | **uat** | Claude Code, from short-lived branches, when [pull requests §6](pull-requests.md#6-merge-rules) is met | Yes |
 
 Never commit directly to `main` or `develop`. Never force-push them. Never delete them.
 
@@ -122,8 +122,9 @@ While `release/0.2.0` is open:
 When UAT passes:
 
 ```bash
-# 4. Merge release → main with a MERGE COMMIT (Claude Code, after Phú's UAT acceptance)
-gh pr merge <release-pr> --merge
+# 4. Merge release → main with a MERGE COMMIT (Claude Code, after the reviewer subagent's APPROVE
+#    and Phú's UAT acceptance comment on the release PR)
+/merge <release-pr>
 
 # 5. Tag main and publish the GitHub Release
 git switch main && git pull --ff-only
@@ -135,7 +136,7 @@ gh release create v0.2.0 --title "v0.2.0" --notes-from-tag   # or paste the CHAN
 git switch -c chore/back-merge-0.2.0 main
 git push -u origin chore/back-merge-0.2.0
 gh pr create --base develop --title "chore(release): back-merge v0.2.0 into develop" --body "Back-merge after release v0.2.0."
-gh pr merge --merge
+/merge <back-merge-pr>    # exempt from review when conflict-free (pull requests §6)
 ```
 
 The tag push triggers the production deployment (database migrations first, then the app), gated by the `production` GitHub Environment. See [environments §3](../operations/environments.md#3-deployment-pipeline).

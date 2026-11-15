@@ -33,7 +33,7 @@ Start at **[docs/README.md](docs/README.md)**. Highlights:
 ```mermaid
 flowchart LR
   I[Issue + plan] --> F[feature/* branch] --> PR[PR into develop]
-  PR -->|cross-agent review + CI| D[develop → UAT]
+  PR -->|independent review + CI| D[develop → UAT]
   D --> R[release/x.y.z → UAT on iPhone] --> M[main + tag → prod]
   M -. back-merge .-> D
 ```

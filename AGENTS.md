@@ -52,7 +52,7 @@ Next.js (App Router) + TypeScript strict, Tailwind + shadcn/ui, Supabase (Postgr
 - New files: follow the matching recipe in [files & folders §3](docs/conventions/files-and-folders.md#3-recipes-creating-a-new-file).
 - PRs and reviews: [pull requests](docs/conventions/pull-requests.md). Fill every template section; post reviews in the fixed format.
 - Start every task by posting a `## Plan` comment on the issue. **Claude Code is the tech lead** ([ADR-0017](docs/adr/0017-claude-code-as-tech-lead.md)): it proceeds with its own plans and approves Antigravity's plans (Antigravity waits for Claude Code's `Plan approved`). Claude Code merges PRs once the merge rules are met.
-- Ask Phú **only** for business rules, information only he has, accounts/secrets, UAT on his iPhone, and production approval (the table in [ADR-0017](docs/adr/0017-claude-code-as-tech-lead.md)). Everything technical is decided by Claude Code.
+- Ask Phú **only** for the items in the table in [ADR-0017](docs/adr/0017-claude-code-as-tech-lead.md): business rules, information only he has, accounts/secrets, UAT on his iPhone, production approval, destructive changes to real data, starting Antigravity sessions. Everything technical is decided by Claude Code.
 - Don't change tests to make them pass unless the test is provably wrong; say so in the PR.
 - If blocked or unsure about a business rule, stop and ask (label `needs-decision`). Don't invent rules.
 

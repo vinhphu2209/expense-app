@@ -4,6 +4,7 @@
 - **Date:** 2026-11-15
 - **Deciders:** Phú
 - **Supersedes:** the "Phú only" file ownership in [ADR-0015](0015-two-agents-with-ownership.md) and [files & folders §1.1](../conventions/files-and-folders.md#11-ownership)
+- **Amended by:** [ADR-0017](0017-claude-code-as-tech-lead.md) (plan approval and merging)
 - **Related:** issue #55, PR #54
 
 ## Context

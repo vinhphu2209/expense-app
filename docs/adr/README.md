@@ -16,8 +16,8 @@ This folder records why the system is the way it is. For the process, see [docum
 | [0010](0010-track-momo-only.md) | Track MoMo, Cash and BNPL only | Accepted | 2026-11-15 |
 | [0011](0011-gitflow-branching.md) | Use GitFlow for branching and releases | Accepted | 2026-11-15 |
 | [0012](0012-dev-uat-prod-environments.md) | Run dev / uat / prod on free tiers | Accepted | 2026-11-15 |
-| [0013](0013-github-issues-and-prs.md) | Track work in GitHub Issues and review in pull requests | Accepted | 2026-11-15 |
+| [0013](0013-github-issues-and-prs.md) | Track work in GitHub Issues and review in pull requests | Accepted (amended by 0017) | 2026-11-15 |
 | [0014](0014-public-repository.md) | Develop in a public repository | Accepted | 2026-11-15 |
-| [0015](0015-two-agents-with-ownership.md) | Split work between two AI agents by ownership boundaries | Accepted (amended by 0016) | 2026-11-15 |
+| [0015](0015-two-agents-with-ownership.md) | Split work between two AI agents by ownership boundaries | Accepted (amended by 0016, 0017) | 2026-11-15 |
 | [0016](0016-claude-code-maintains-definition-files.md) | Claude Code maintains the definition files | Accepted (amended by 0017) | 2026-11-15 |
 | [0017](0017-claude-code-as-tech-lead.md) | Claude Code acts as tech lead (approves plans, merges PRs) | Accepted | 2026-11-15 |

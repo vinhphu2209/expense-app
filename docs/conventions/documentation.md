@@ -49,12 +49,12 @@ Don't write one for choices fully covered by a convention doc or for routine lib
 stateDiagram-v2
   [*] --> Proposed: PR opened
   Proposed --> Accepted: PR merged
-  Proposed --> Rejected: Phú closes (keep file, status Rejected)
+  Proposed --> Rejected: PR closed without merge (keep file, status Rejected)
   Accepted --> Superseded: newer ADR replaces it
   Accepted --> Deprecated: no longer relevant
 ```
 
-- An agent may write an ADR with status **Proposed** in its PR. Only Phú sets it to **Accepted** (by merging).
+- An agent writes an ADR with status **Proposed** in its PR. It becomes **Accepted** when Claude Code merges the PR under [pull requests §6](pull-requests.md#6-merge-rules). An ADR that records a business rule needs Phú's answer on a `needs-decision` question first.
 - ADRs are immutable once accepted. To change a decision, write a new ADR with `Supersedes: ADR-NNNN` and set the old one's status to `Superseded by ADR-MMMM`. Changing only the status line of the old ADR is the one allowed edit.
 - Numbers are never reused, including for rejected ADRs.
 

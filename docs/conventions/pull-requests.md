@@ -61,9 +61,10 @@ Do not put the issue number in the title. Put `Closes #14` in the description.
 | `src/lib/domain/money/**`, month-close, views | `money-logic-reviewer` subagent | Unclear business rules behind the tests go to Phú (`needs-decision`) |
 | `supabase/migrations/**`, RLS, auth, API tokens | `money-logic-reviewer` subagent | Destructive changes to real data: `needs-decision` |
 | Docs, ADRs, conventions | Fresh-context reviewer subagent | Rule changes summarised to Phú in chat |
-| `release/*`, `hotfix/*` | Phú: UAT acceptance on his iPhone | All CI green; Phú approves the production deployment |
+| `release/*`, `hotfix/*` into `main` | Reviewer subagent | Phú's UAT acceptance comment on the PR; Phú approves the production deployment |
+| Back-merge `main` → `develop` | — (exempt when conflict-free) | A back-merge with conflicts needs the reviewer subagent |
 
-**Claude Code merges** (tech lead, [ADR-0017](../adr/0017-claude-code-as-tech-lead.md)). It never merges its own PR without an independent reviewer's `APPROVE`.
+**Claude Code merges** (tech lead, [ADR-0017](../adr/0017-claude-code-as-tech-lead.md)). It never merges its own PR without an independent reviewer's `APPROVE` / `APPROVE WITH NITS`.
 
 ### 5.2 How a review is posted
 
@@ -113,12 +114,15 @@ gh pr review 42 --comment --body-file review.md
 
 A PR may be merged only when **all** of these are true:
 
-- [ ] CI is green (`ci / check`, `ci / pr-title`, and `ci / e2e` for UI changes).
-- [ ] The latest review verdict is `APPROVE` or `APPROVE WITH NITS`.
+- [ ] CI is green (`ci / check`, `ci / pr-title`, and `ci / e2e` for UI changes). Until CI exists (P0-00b), `pnpm check` is run on the PR head locally and the result is stated in a PR comment.
+- [ ] For **each** required reviewer in §5.1, that reviewer's **latest** verdict is `APPROVE` or `APPROVE WITH NITS`, and no required reviewer is the PR's author agent. (Conflict-free back-merges are exempt.)
 - [ ] Every `blocker` and `should` finding has a reply.
 - [ ] All conversations are resolved.
-- [ ] The PR is not labelled `blocked` or `do-not-merge`.
+- [ ] The PR is not labelled `blocked`, `do-not-merge` or `needs-decision`.
 - [ ] `db:migration` PRs into `develop`: no `release/*` branch is open.
+- [ ] PRs into `main`: Phú has posted his UAT acceptance on the PR.
+
+`/merge <pr>` (`.claude/commands/merge.md`) checks exactly this list.
 
 Merge method depends on the target ([branching §5](branching.md#5-merge-methods-why-they-differ)). With squash, the squash commit message is the PR title plus `Closes #<issue>` and the `Co-Authored-By` trailers.
 
