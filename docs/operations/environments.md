@@ -66,7 +66,8 @@ GitHub Actions owns deployment order (database first, then app). Vercel's automa
 
 | Workflow | Trigger | Steps |
 | --- | --- | --- |
-| `ci.yml` | every PR, push to `develop`/`main` | Job `check`: install → `pnpm check` (typecheck, lint, format, markdownlint, unit) → build. Job `pr-title`: commitlint on the PR title. Added later: start Supabase → pgTAP + integration (P0-02), e2e on WebKit iPhone (P1-10) |
+| `ci.yml` | every PR, push to `develop`/`main` | Job `check`: install → `pnpm check` (typecheck, lint, format, markdownlint, unit) → build. Added later: start Supabase → pgTAP + integration (P0-02), e2e on WebKit iPhone (P1-10) |
+| `pr-title.yml` | PR opened, edited, synchronized | commitlint on the PR title (re-runs on title edits) |
 | `deploy-uat.yml` | push to `develop`, `release/**`, `hotfix/**` | environment `uat` → `supabase db push` to `expense-uat` (Vercel deploys the preview itself) |
 | `deploy-prod.yml` | push tag `v*` | environment `production` (**requires Phú's approval**) → encrypted backup → `supabase db push` to `expense-prod` → `vercel deploy --prod` → smoke test |
 | `backup.yml` | nightly cron | environment `production` → `pg_dump` → encrypt → store (§5) |

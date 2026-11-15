@@ -9,8 +9,9 @@ updates:
       minor-and-patch:
         update-types: [minor, patch]
     commit-message:
-      prefix: build
-      include: scope
+      # Dependabot adds the colon. Fixed scope: commitlint has no `deps-dev` scope.
+      prefix: "build(deps)"
+      prefix-development: "build(deps)"
     labels: ["type:chore", "area:ci"]
   - package-ecosystem: github-actions
     directory: /
@@ -18,6 +19,5 @@ updates:
     schedule:
       interval: weekly
     commit-message:
-      prefix: ci
-      include: scope
+      prefix: "ci(deps)"
     labels: ["type:chore", "area:ci"]

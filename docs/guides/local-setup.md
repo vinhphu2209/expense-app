@@ -49,7 +49,7 @@ Antigravity's worktree runs on another port: `pnpm dev -p 3001` ([ai-workflow §
 - **commit-msg:** commitlint checks the message against [commits](../conventions/commits.md) (types and the scope list in `commitlint.config.mjs`).
 - **pre-commit:** ESLint, Prettier and markdownlint on the staged files.
 
-CI runs the same checks (`.github/workflows/ci.yml`), so never bypass hooks with `--no-verify`.
+CI runs the same checks (`.github/workflows/ci.yml`, `pr-title.yml`), so never bypass hooks with `--no-verify`.
 
 ## Environment variables
 
