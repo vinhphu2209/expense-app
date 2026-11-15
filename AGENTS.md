@@ -1,6 +1,6 @@
 # AGENTS.md — Shared rules for all AI agents (Claude Code, Antigravity)
 
-Any agent may update this file through a PR when a rule or fact changes ([ADR-0016](docs/adr/0016-agents-update-rules-via-prs.md)); call it out in the PR's *Review focus*. Phú merges.
+Only Claude Code edits this file and the other definition files, through a PR that Phú merges ([ADR-0016](docs/adr/0016-claude-code-maintains-definition-files.md)). Antigravity requests changes with "Request for Claude Code: …".
 This file is short on purpose: it points to the conventions instead of copying them ([documentation §5](docs/conventions/documentation.md#5-agent-context-files)).
 
 ## Project

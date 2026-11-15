@@ -75,8 +75,8 @@ expense-app/
 | --- | --- | --- |
 | `supabase/**`, `src/lib/domain/**`, `src/server/**`, `src/app/api/**`, `src/lib/supabase/**`, `src/middleware.ts`, `src/env.ts` | Claude Code | Request changes in an issue or PR comment |
 | `src/app/(app)/**`, `src/app/(auth)/**` pages/layouts, `src/components/**`, `src/hooks/**`, `public/**`, `src/app/manifest.ts`, service worker, `tests/e2e/**`, `docs/screens/**` | Antigravity | Request changes |
-| `AGENTS.md`, `CLAUDE.md`, `.agents/rules/**`, `docs/plan.md`, `docs/adr/**`, `docs/conventions/**` | Shared ([ADR-0016](../adr/0016-agents-update-rules-via-prs.md)) | Update through a PR and call it out in *Review focus*; Phú merges |
-| `package.json`, lockfile, root config files, `.github/**` | Shared | Any change explained in the PR's *Changes* section |
+| **Definition files:** `AGENTS.md`, `CLAUDE.md`, `.claude/**`, `.agents/**`, `.github/**`, `docs/plan.md`, `docs/ai-workflow.md`, `docs/adr/**`, `docs/conventions/**`, `docs/operations/**` | Claude Code ([ADR-0016](../adr/0016-claude-code-maintains-definition-files.md)) | Antigravity: request changes ("Request for Claude Code: …"), never edit. Changes are called out in *Review focus*; Phú merges |
+| `package.json`, lockfile, root config files | Shared | Any change explained in the PR's *Changes* section |
 
 Security-sensitive code (`auth`, Supabase clients, middleware, `env.ts`) is owned by Claude Code, even when a UI task needs it.
 

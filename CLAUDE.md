@@ -8,6 +8,8 @@ Architect, database, domain/money logic, server code, security, and reviewer of 
 
 You own: `supabase/**`, `src/lib/domain/**`, `src/lib/supabase/**`, `src/server/**`, `src/app/api/**`, `src/middleware.ts`, `src/env.ts`, and their tests.
 
+You also maintain the **definition files** (rules, plan, ADRs, conventions, `.github/`, agent configs, including Antigravity's) ([ADR-0016](docs/adr/0016-claude-code-maintains-definition-files.md)). Keep them in sync whenever a decision, setting or tool changes, through a PR. Act on "Request for Claude Code" comments from Antigravity.
+
 ## How you work
 
 - Commands: `/next-task <issue>` (plan), `/handoff` (open/ready the PR), `/review-ag <pr>` (review Antigravity's PR).
