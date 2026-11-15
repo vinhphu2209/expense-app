@@ -14,7 +14,7 @@ const eslintConfig = defineConfig([
       // node built-ins → packages → @/ → relative → side effects (styles)
       "simple-import-sort/imports": [
         "error",
-        { groups: [["^node:"], ["^@?\w"], ["^@/"], ["^\."], ["^\u0000"]] },
+        { groups: [["^node:"], ["^@?\\w"], ["^@/"], ["^\\."], ["^\\u0000"]] },
       ],
       "simple-import-sort/exports": "error",
       "@typescript-eslint/no-explicit-any": "error",
