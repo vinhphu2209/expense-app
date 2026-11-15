@@ -436,7 +436,7 @@ Goal: make logging happen *right after* paying in MoMo, without leaving the PWA-
 
 ## 8. Definition of Done (every task)
 
-The canonical checklist lives in [pull requests §7](conventions/pull-requests.md#7-definition-of-done-pr-checklist) and is copied into every PR by the template. In short: CI green, money logic tested, RLS + pgTAP for new tables, works at 390×844, no secrets or real data, docs + CHANGELOG updated, reviewed by the other agent and Phú.
+The canonical checklist lives in [pull requests §7](conventions/pull-requests.md#7-definition-of-done-pr-checklist) and is copied into every PR by the template. In short: CI green, money logic tested, RLS + pgTAP for new tables, works at 390×844, no secrets or real data, docs + CHANGELOG updated, independently reviewed, merged by Claude Code (ADR-0017).
 
 ---
 

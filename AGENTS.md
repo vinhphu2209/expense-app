@@ -1,6 +1,6 @@
 # AGENTS.md — Shared rules for all AI agents (Claude Code, Antigravity)
 
-Only Claude Code edits this file and the other definition files, through a PR that Phú merges ([ADR-0016](docs/adr/0016-claude-code-maintains-definition-files.md)). Antigravity requests changes with "Request for Claude Code: …".
+Only Claude Code edits this file and the other definition files, through a PR ([ADR-0016](docs/adr/0016-claude-code-maintains-definition-files.md)). Antigravity requests changes with "Request for Claude Code: …".
 This file is short on purpose: it points to the conventions instead of copying them ([documentation §5](docs/conventions/documentation.md#5-agent-context-files)).
 
 ## Project
@@ -51,7 +51,8 @@ Next.js (App Router) + TypeScript strict, Tailwind + shadcn/ui, Supabase (Postgr
 - Commits: [commits](docs/conventions/commits.md). Conventional Commits with a scope from the list, plus the AI trailer.
 - New files: follow the matching recipe in [files & folders §3](docs/conventions/files-and-folders.md#3-recipes-creating-a-new-file).
 - PRs and reviews: [pull requests](docs/conventions/pull-requests.md). Fill every template section; post reviews in the fixed format.
-- Start every task by posting a `## Plan` comment on the issue and **wait for `Plan approved`**. This is mandatory for anything touching schema, money logic, auth or CI.
+- Start every task by posting a `## Plan` comment on the issue. **Claude Code is the tech lead** ([ADR-0017](docs/adr/0017-claude-code-as-tech-lead.md)): it proceeds with its own plans and approves Antigravity's plans (Antigravity waits for Claude Code's `Plan approved`). Claude Code merges PRs once the merge rules are met.
+- Ask Phú **only** for the items in the table in [ADR-0017](docs/adr/0017-claude-code-as-tech-lead.md): business rules, information only he has, accounts/secrets, UAT on his iPhone, production approval, destructive changes to real data, starting Antigravity sessions. Everything technical is decided by Claude Code.
 - Don't change tests to make them pass unless the test is provably wrong; say so in the PR.
 - If blocked or unsure about a business rule, stop and ask (label `needs-decision`). Don't invent rules.
 

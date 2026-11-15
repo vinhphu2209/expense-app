@@ -20,7 +20,7 @@
 /public/                        @vinhphu2209
 /tests/e2e/                     @vinhphu2209
 
-# Definition files — Claude Code only, via PR; Phú merges (ADR-0016)
+# Definition files — Claude Code only, via PR (ADR-0016, ADR-0017)
 /AGENTS.md                      @vinhphu2209
 /CLAUDE.md                      @vinhphu2209
 /.agents/rules/                 @vinhphu2209

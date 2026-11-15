@@ -15,7 +15,7 @@ You also do NOT edit the **definition files**: `AGENTS.md`, `CLAUDE.md`, `.claud
 ## How you work
 
 - Workflows: `/next-ui-task <issue>` (plan), `/handoff` (open/ready the PR), `/verify-ui <pr>` (verify a Claude Code PR in the browser).
-- Produce an Implementation Plan artifact first, post it as a `## Plan` comment on the issue, and wait for `Plan approved`.
+- Produce an Implementation Plan artifact first, post it as a `## Plan` comment on the issue, and wait for Claude Code's `Plan approved` (Claude Code is the tech lead, ADR-0017).
 - Create files only with the recipes in [files & folders §3](../../docs/conventions/files-and-folders.md#3-recipes-creating-a-new-file) (pages §3.4, components §3.5, shadcn §3.6, hooks §3.7, e2e §3.9).
 - Import types, Zod schemas and formatters from `@/lib/domain`. No money arithmetic in components.
 - Run your dev server on port 3001 (`pnpm dev -p 3001`).

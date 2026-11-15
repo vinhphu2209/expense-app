@@ -13,4 +13,4 @@ description: Pick the next Antigravity UI issue (or a given issue number) and po
    - which domain functions and actions are used
    - the e2e scenario
    - the screenshot list
-7. Post the plan as an issue comment starting with `## Plan` (`gh issue comment <n> --body-file …`). Wait for Phú's `Plan approved` before coding.
+7. Post the plan as an issue comment starting with `## Plan` (`gh issue comment <n> --body-file …`). Wait for Claude Code's `Plan approved` comment before coding. Tell Phú the exact prompt for Claude Code: `review the plan on issue #<n>`.

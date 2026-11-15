@@ -5,7 +5,7 @@ description: Verify a Claude Code pull request by running the real app in the br
 1. Identify the PR: from the user's message, or the oldest ready PR from `gh pr list --label agent:claude-code --state open`. Read its description, especially "How to verify" and "Review focus": `gh pr view <n> --comments`.
 2. Commit or stash your own work first. Then check out the PR detached: `gh pr checkout <n> --detach`.
    - Run `pnpm install` if the lockfile changed.
-   - If the PR has `db:migration`, verify **locally** (the preview URL reads UAT, which doesn't have the migration yet). Run `supabase db reset`, coordinating with Phú because the local DB is shared.
+   - If the PR has `db:migration`, verify **locally** (the preview URL reads UAT, which doesn't have the migration yet). Before running `supabase db reset`, post a comment on the PR saying you are resetting the local DB (it is shared with Claude Code).
    - Otherwise you may use the PR's Vercel preview URL.
 3. Start `pnpm dev -p 3001` (when verifying locally). Open the browser at viewport 390×844.
 4. Exercise: the happy path, the empty state, large amounts (1.250.000.000), invalid input ("abc", negative), a quick double-submit, a refresh mid-flow, and offline (if relevant).

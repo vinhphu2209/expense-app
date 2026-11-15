@@ -11,8 +11,8 @@ This repo uses **GitFlow**. Every change reaches `main` through a pull request, 
 
 | Branch | Purpose | Deploys to | Who merges into it | Protected |
 | --- | --- | --- | --- | --- |
-| `main` | Production. Every commit is a released version with a tag `vX.Y.Z`. | **prod** | Phú, only from `release/*` or `hotfix/*` | Yes |
-| `develop` | Integration branch. Always deployable to UAT. | **uat** | Phú, from short-lived branches | Yes |
+| `main` | Production. Every commit is a released version with a tag `vX.Y.Z`. | **prod** | Claude Code, only from `release/*` or `hotfix/*`, after Phú's UAT acceptance | Yes |
+| `develop` | Integration branch. Always deployable to UAT. | **uat** | Claude Code, from short-lived branches, when [pull requests §6](pull-requests.md#6-merge-rules) is met | Yes |
 
 Never commit directly to `main` or `develop`. Never force-push them. Never delete them.
 
@@ -122,8 +122,9 @@ While `release/0.2.0` is open:
 When UAT passes:
 
 ```bash
-# 4. Merge release → main with a MERGE COMMIT (Phú, in the GitHub UI or:)
-gh pr merge <release-pr> --merge
+# 4. Merge release → main with a MERGE COMMIT (Claude Code, after the reviewer subagent's APPROVE
+#    and Phú's UAT acceptance comment on the release PR)
+/merge <release-pr>
 
 # 5. Tag main and publish the GitHub Release
 git switch main && git pull --ff-only
@@ -135,7 +136,7 @@ gh release create v0.2.0 --title "v0.2.0" --notes-from-tag   # or paste the CHAN
 git switch -c chore/back-merge-0.2.0 main
 git push -u origin chore/back-merge-0.2.0
 gh pr create --base develop --title "chore(release): back-merge v0.2.0 into develop" --body "Back-merge after release v0.2.0."
-gh pr merge --merge
+/merge <back-merge-pr>    # exempt from review when conflict-free (pull requests §6)
 ```
 
 The tag push triggers the production deployment (database migrations first, then the app), gated by the `production` GitHub Environment. See [environments §3](../operations/environments.md#3-deployment-pipeline).
@@ -156,7 +157,14 @@ gh pr create --base main --title "fix(budget): month boundary in Asia/Ho_Chi_Min
 ```
 
 Then repeat steps 4–6 of §4.2: merge commit into `main` → tag `v0.2.1` → back-merge into `develop`.
-If a `release/*` branch is open, also back-merge the hotfix into that release branch.
+If a `release/*` branch is open, also back-merge the hotfix into that release branch:
+
+```bash
+git switch -c chore/back-merge-0.2.1-release main
+git push -u origin chore/back-merge-0.2.1-release
+gh pr create --base release/0.3.0 --title "chore(release): back-merge v0.2.1 into release/0.3.0" --body "Back-merge of hotfix v0.2.1."
+/merge <back-merge-pr>    # merge commit; exempt from review when conflict-free
+```
 
 ---
 
@@ -166,7 +174,7 @@ If a `release/*` branch is open, also back-merge the hotfix into that release br
 | --- | --- | --- |
 | short-lived → `develop` / `release/*` | Squash | One commit per issue on `develop`; the PR title becomes the commit message, so `develop` reads like a changelog. |
 | `release/*` / `hotfix/*` → `main` | Merge commit | Keeps the release as one visible unit on `main`, and keeps commit SHAs identical so back-merging is conflict-free. |
-| `main` → `develop` back-merge | Merge commit | Brings the version bump + hotfixes back without rewriting history. |
+| Back-merge (`main` or `chore/back-merge-*` → `develop` or `release/*`) | Merge commit | Brings the version bump + hotfixes back without rewriting history. |
 
 Rebase-merge is disabled in repo settings.
 

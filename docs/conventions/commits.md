@@ -124,7 +124,7 @@ Transparency matters in a public portfolio repo: every commit made by an agent s
 
 - Claude Code appends: `Co-Authored-By: Claude <noreply@anthropic.com>` (the exact model name may appear).
 - Antigravity appends: `Assisted-by: Antigravity` (it has no official no-reply address, so a plain trailer is used instead of a fake email).
-- The squash commit on `develop` must keep these trailers. GitHub pre-fills `Co-Authored-By` lines from branch commits; Phú copies any `Assisted-by` line into the squash message when merging.
+- The squash commit on `develop` must keep these trailers. GitHub pre-fills `Co-Authored-By` lines from branch commits; the merger (Claude Code, `/merge`) copies any `Assisted-by` line into the squash message.
 
 ---
 

@@ -51,9 +51,9 @@ Project: **Expense App Roadmap** (GitHub Projects, board view).
 | Column | Meaning | Moves when |
 | --- | --- | --- |
 | Backlog | Exists, not ready | Issue created |
-| Ready | Meets Definition of Ready (§6) | Phú moves it |
+| Ready | Meets Definition of Ready (§6) | Claude Code moves it |
 | Planning | Owner is writing the plan in the issue | Agent runs `/next-task` or `/next-ui-task` |
-| In progress | Branch exists, draft PR open | Phú approves the plan |
+| In progress | Branch exists, draft PR open | Plan approved by Claude Code |
 | In review | PR ready for review | PR marked *Ready* |
 | Done | PR merged | Automatic on merge |
 
@@ -70,7 +70,7 @@ An issue can move to **Ready** when it has:
 
 ## 7. Plans live in the issue
 
-Before coding, the owner posts its implementation plan as an **issue comment** headed `## Plan`. It covers files, signatures, test cases and risks. Phú approves by replying `Plan approved` (or edits it). This keeps the reasoning public and attached to the work.
+Before coding, the owner posts its implementation plan as an **issue comment** headed `## Plan`. It covers files, signatures, test cases and risks. Claude Code (tech lead, [ADR-0017](../adr/0017-claude-code-as-tech-lead.md)) approves Antigravity's plans by replying `Plan approved` and proceeds with its own. Business questions in a plan go to Phú with `needs-decision`. This keeps the reasoning public and attached to the work.
 
 ## 8. Dependencies
 

@@ -57,13 +57,14 @@ Do not put the issue number in the title. Put `Closes #14` in the description.
 | PR contains | Primary reviewer | Additional required check |
 | --- | --- | --- |
 | UI by Antigravity | Claude Code (`/review-ag <pr>`) | — |
-| Backend / domain by Claude Code | Antigravity (`/verify-ui <pr>`) when the change is visible in the app | — |
-| `src/lib/domain/money/**`, month-close, views | Claude Code with the `money-logic-reviewer` subagent | Phú reads the test cases |
-| `supabase/migrations/**`, RLS, auth, API tokens | `money-logic-reviewer` subagent | Phú reviews the SQL |
-| Docs, ADRs, conventions | Phú | — |
-| `release/*`, `hotfix/*` | Phú (UAT acceptance on iPhone) | All CI green on the release branch |
+| Anything by Claude Code | Fresh-context reviewer subagent (always) | Antigravity `/verify-ui <pr>` when the change is visible in the app |
+| `src/lib/domain/money/**`, month-close, views | `money-logic-reviewer` subagent | Unclear business rules behind the tests go to Phú (`needs-decision`) |
+| `supabase/migrations/**`, RLS, auth, API tokens | `money-logic-reviewer` subagent | Destructive changes to real data: `needs-decision` |
+| Docs, ADRs, conventions | Fresh-context reviewer subagent | Rule changes summarised to Phú in chat |
+| `release/*`, `hotfix/*` into `main` | Reviewer subagent | Phú's UAT acceptance comment on the PR; Phú approves the production deployment |
+| Back-merge (`main` or `chore/back-merge-*` → `develop` or `release/*`) | — (exempt when conflict-free) | A back-merge with conflicts needs the reviewer subagent |
 
-Phú is always the **final reviewer and the only person who merges**.
+**Claude Code merges** (tech lead, [ADR-0017](../adr/0017-claude-code-as-tech-lead.md)). It never merges its own PR without an independent reviewer's `APPROVE` / `APPROVE WITH NITS`.
 
 ### 5.2 How a review is posted
 
@@ -89,6 +90,7 @@ gh pr review 42 --comment --body-file review.md
 **Verdict:** REQUEST CHANGES (1 blocker).
 ```
 
+- Reviewer names in the header: `Claude Code`, `Antigravity`, `Reviewer subagent` (a fresh-context Claude reviewer that has not seen the author's session), or `money-logic-reviewer`.
 - Verdict is one of `APPROVE`, `APPROVE WITH NITS`, `REQUEST CHANGES`.
 - Severity: **blocker** (must fix before merge), **should** (fix now, or open a follow-up issue and link it), **nit** (optional).
 - Each finding gives `file:line`, the problem, and a concrete fix.
@@ -104,7 +106,7 @@ gh pr review 42 --comment --body-file review.md
 ### 5.4 Disagreements
 
 1. Both sides state their reasoning in the PR thread, under a comment starting with `### Disagreement`.
-2. Phú decides in the thread.
+2. Claude Code decides technical disagreements in the thread; business questions go to Phú (`needs-decision`).
 3. If the decision is a lasting rule, it becomes an ADR ([documentation §3](documentation.md#3-architecture-decision-records)).
 4. An agent never "wins" by overwriting the other's code.
 
@@ -112,14 +114,17 @@ gh pr review 42 --comment --body-file review.md
 
 A PR may be merged only when **all** of these are true:
 
-- [ ] CI is green (`ci / check`, `ci / pr-title`, and `ci / e2e` for UI changes).
-- [ ] The latest review verdict is `APPROVE` or `APPROVE WITH NITS`.
+- [ ] CI is green (`ci / check`, `ci / pr-title`, and `ci / e2e` for UI changes). Until CI exists (P0-00b), `pnpm check` is run on the PR head locally and the result is stated in a PR comment.
+- [ ] For **each** required reviewer in §5.1, that reviewer's **latest** verdict is `APPROVE` or `APPROVE WITH NITS`, and no required reviewer is the PR's author agent. (Conflict-free back-merges are exempt.)
 - [ ] Every `blocker` and `should` finding has a reply.
 - [ ] All conversations are resolved.
-- [ ] The PR is not labelled `blocked` or `do-not-merge`.
+- [ ] The PR is not labelled `blocked`, `do-not-merge` or `needs-decision`.
 - [ ] `db:migration` PRs into `develop`: no `release/*` branch is open.
+- [ ] PRs into `main`: Phú has posted his UAT acceptance on the PR.
 
-Merge method depends on the target ([branching §5](branching.md#5-merge-methods-why-they-differ)). With squash, the squash commit message is the PR title plus `Closes #<issue>` and the `Co-Authored-By` trailers.
+`/merge <pr>` (`.claude/commands/merge.md`) checks exactly this list.
+
+Merge method depends on the target ([branching §5](branching.md#5-merge-methods-why-they-differ)). With squash, the squash commit message is the PR title plus `Closes #<issue>` and the `Co-Authored-By` / `Assisted-by` trailers.
 
 After merge: the issue closes automatically and the Project card moves to *Done*. The other agent's worktree runs `git rebase origin/develop` before continuing.
 
@@ -145,4 +150,4 @@ Same labels as issues ([issues §3](issues.md#3-labels)). Additionally:
 | --- | --- |
 | `db:migration` | Contains a migration. Triggers extra review and the release-freeze rule. |
 | `do-not-merge` | Hard stop, with a comment explaining why. |
-| `needs-decision` | Waiting for Phú to decide something in the thread. |
+| `needs-decision` | Waiting for Phú: a business rule or information only he has. |

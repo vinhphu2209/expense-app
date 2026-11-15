@@ -5,11 +5,11 @@ This is a personal project built by one human (Phú) with two AI coding agents, 
 ## The short version
 
 1. **Issue first.** Every change starts from a GitHub issue ([issues](docs/conventions/issues.md)).
-2. **Plan in the issue.** Post a `## Plan` comment; wait for `Plan approved`.
+2. **Plan in the issue.** Post a `## Plan` comment. Claude Code (tech lead) approves Antigravity's plans and proceeds with its own.
 3. **Branch from `develop`:** `feature/<issue>-<slug>` ([branching](docs/conventions/branching.md)).
 4. **Commit with Conventional Commits:** `feat(quickadd): add numeric keypad` ([commits](docs/conventions/commits.md)).
 5. **Open a draft PR into `develop`** using the template; mark it ready when the Definition of Done is met ([pull requests](docs/conventions/pull-requests.md)).
-6. **Review:** the other agent reviews, Phú reviews and merges (squash).
+6. **Review:** an independent reviewer approves; Claude Code merges (squash) when CI is green. Phú is involved only for the items in the [ADR-0017](docs/adr/0017-claude-code-as-tech-lead.md) table (business rules, information only he has, accounts/secrets, UAT on his iPhone, production approval, destructive data changes, starting Antigravity).
 7. **Release:** `release/x.y.z` → UAT on iPhone → `main` + tag `vx.y.z` → prod ([branching §4.2](docs/conventions/branching.md#42-release)).
 
 ## Where things go
