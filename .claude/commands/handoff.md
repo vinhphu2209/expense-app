@@ -13,4 +13,5 @@ description: Finish the current task — run checks, open or update the PR from 
    - Labels: copy from the issue and add `db:migration` if relevant.
    - Commands: `gh pr create --draft --base develop --title "<title>" --body-file <tmp-body.md>`, then `gh pr ready <n>`.
 5. Add a `CHANGELOG.md` line under `Unreleased` for `feat`/`fix` PRs (commit `docs(release): update changelog`, or include it in the last commit).
-6. Tell Phú in Vietnamese, in 3–5 lines: what was done, the PR link, how to test, and the exact prompt for Antigravity: `/verify-ui <pr-number>`.
+6. Get the independent review (pull-requests.md §5.1): run a fresh-context reviewer subagent on the PR diff and post its result with `gh pr review --comment`. Only if the change is visible in the app, also give Phú the exact prompt for Antigravity: `/verify-ui <pr-number>`.
+7. When the merge rules are met, run `/merge <pr>`. Tell Phú in Vietnamese in 1–3 lines what was merged.

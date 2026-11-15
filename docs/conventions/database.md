@@ -81,7 +81,7 @@ commit;
    - Release N+1: switch reads, drop old column.
 4. One concern per migration. Schema and large data backfills go in separate migrations.
 5. Migration + `pnpm db:types` output + Zod schema changes go in one commit.
-6. Destructive statements (`drop`, `alter type ... drop`, `truncate`) require a `-- DESTRUCTIVE:` comment explaining why, and Phú's explicit approval in the PR.
+6. Destructive statements (`drop`, `alter type ... drop`, `truncate`) require a `-- DESTRUCTIVE:` comment explaining why, and, if they can lose existing real data, Phú's explicit answer on a `needs-decision` question.
 7. PRs with migrations get the `db:migration` label and are not merged into `develop` while a `release/*` branch is open.
 
 ## 5. Views & functions

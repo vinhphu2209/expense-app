@@ -12,7 +12,7 @@
 3. **Agents communicate through GitHub, not memory:** plans are issue comments, handoffs are PR descriptions, reviews are PR review comments.
 4. **One branch per agent at a time**, one git worktree per agent.
 5. **Contract-first:** Claude Code merges types/Zod/server actions (`src/lib/domain/`) before Antigravity builds UI on them.
-6. **Phú** approves plans, answers `needs-decision` questions, merges every PR and tags releases. Only Claude Code edits the definition files (rules, plan, ADRs, conventions, `.github/`), through a PR ([ADR-0016](adr/0016-claude-code-maintains-definition-files.md)).
+6. **Claude Code is the tech lead** ([ADR-0017](adr/0017-claude-code-as-tech-lead.md)): it approves plans, decides technical questions, merges PRs and runs releases. **Phú** answers `needs-decision` questions, provides accounts/secrets, accepts releases on his iPhone and approves production deployments. Only Claude Code edits the definition files (rules, plan, ADRs, conventions, `.github/`), through a PR ([ADR-0016](adr/0016-claude-code-maintains-definition-files.md)).
 7. **All written artifacts are in English.** Agents talk to Phú in Vietnamese in chat.
 
 ## 2. Roles
@@ -77,15 +77,15 @@ sequenceDiagram
   participant O as Owner agent
   participant GH as GitHub
   participant R as Reviewer agent
-  P->>GH: Move issue to Ready (labels, milestone)
   O->>GH: /next-task → "## Plan" comment on issue
-  P->>GH: "Plan approved"
+  Note over O,GH: Claude Code proceeds with its own plan / approves Antigravity's
+  O-->>P: needs-decision? ask only business questions
   O->>O: feature/<n>-<slug> from develop, code + tests
   O->>GH: /handoff → PR (template filled) → Ready
   GH->>GH: CI (check, pr-title, e2e)
   R->>GH: /review-ag or /verify-ui → review comment (verdict)
   O->>GH: Fix commits, reply to findings
-  P->>GH: Final review → squash merge into develop
+  O->>GH: Claude Code merges (squash) into develop when merge rules are met
   GH->>GH: Issue closed, deploy to UAT
   O->>O: Other worktree: git rebase origin/develop
 ```
@@ -106,7 +106,7 @@ Parallel is fine when two issues **touch no common files**. Good pairs:
 
 ### Releases
 
-Phú cuts releases ([branching §4.2](conventions/branching.md#42-release)). Agents may be asked to fix bugs on `release/*` via `bugfix/` PRs targeting the release branch.
+Claude Code cuts releases ([branching §4.2](conventions/branching.md#42-release)); Phú accepts them on his iPhone and approves the production deployment. Agents may be asked to fix bugs on `release/*` via `bugfix/` PRs targeting the release branch.
 
 ## 5. Prompt templates
 
@@ -114,14 +114,15 @@ Phú cuts releases ([branching §4.2](conventions/branching.md#42-release)). Age
 | --- | --- |
 | Plan a Claude Code task | `/next-task 23` |
 | Plan an Antigravity task | `/next-ui-task 31` |
-| Approve a plan | Comment `Plan approved` on the issue, then tell the agent "Plan approved, start on the branch." |
+| Approve an Antigravity plan | Tell Claude Code: `review the plan on issue #31`; it comments `Plan approved` or asks for changes |
+| Merge a PR | Claude Code does it (`/merge 42`) once the merge rules are met |
 | Hand off | `/handoff` |
 | Claude Code reviews Antigravity | `/review-ag 42` |
 | Antigravity verifies Claude Code | `/verify-ui 40 — test create/edit/delete transaction through the existing UI` |
 
 ### When the agents disagree
 
-Both write their reasoning in the PR under `### Disagreement`. Phú decides in the thread; lasting rules become an ADR. An agent never "wins" by overwriting the other's code.
+Both write their reasoning in the PR under `### Disagreement`. Claude Code decides technical disagreements; business questions go to Phú. Lasting rules become an ADR. An agent never "wins" by overwriting the other's code.
 
 ## 6. Quality tips
 

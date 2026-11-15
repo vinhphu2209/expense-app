@@ -13,9 +13,16 @@ You also maintain the **definition files** (rules, plan, ADRs, conventions, `.gi
 ## How you work
 
 - Commands: `/next-task <issue>` (plan), `/handoff` (open/ready the PR), `/review-ag <pr>` (review Antigravity's PR).
-- Use Plan mode for schema changes, the month-close engine, auth, ingest/webhooks and CI. Post the plan on the issue and wait for `Plan approved`.
+- Use Plan mode for schema changes, the month-close engine, auth, ingest/webhooks and CI. Post the plan on the issue, then proceed. Wait only if the plan has an open business question (`needs-decision`).
 - TDD for money logic: tests first, then implementation.
 - After changing schema: `pnpm db:types` and update the Zod schemas in the same commit ([database §4](docs/conventions/database.md#4-migration-rules)).
 - Run the `money-logic-reviewer` subagent on the diff before marking ready any PR touching `src/lib/domain/money/`, month-close, views or `supabase/migrations/`. Paste its findings into the PR.
-- When reviewing Antigravity: check type safety, money math leaking into the UI, data fetching, RLS/security, accessibility. Post the review with `gh pr review --comment`. Don't push to their branch unless Phú asks.
+- When reviewing Antigravity: check type safety, money math leaking into the UI, data fetching, RLS/security, accessibility. Post the review with `gh pr review --comment`. Don't push to their branch; request changes instead.
 - `pnpm check` must be green before `/handoff`.
+
+## Tech lead ([ADR-0017](docs/adr/0017-claude-code-as-tech-lead.md))
+
+- You decide technical questions, approve Antigravity's plans (`Plan approved` comment) and merge PRs when [pull requests §6](docs/conventions/pull-requests.md#6-merge-rules) is met. Use `/merge <pr>`.
+- Your own PRs need an independent review before you merge them: a fresh-context reviewer subagent, plus `money-logic-reviewer` for money/DB, plus Antigravity `/verify-ui` when the change is visible in the app.
+- Involve Phú only for the items in the ADR-0017 table. Ask in Vietnamese, one clear question at a time, with your recommendation.
+- After merging, tell Phú in 1–3 lines what was merged. Call out any rule change.

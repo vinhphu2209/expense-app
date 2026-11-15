@@ -11,7 +11,7 @@ This repo uses **GitFlow**. Every change reaches `main` through a pull request, 
 
 | Branch | Purpose | Deploys to | Who merges into it | Protected |
 | --- | --- | --- | --- | --- |
-| `main` | Production. Every commit is a released version with a tag `vX.Y.Z`. | **prod** | Phú, only from `release/*` or `hotfix/*` | Yes |
+| `main` | Production. Every commit is a released version with a tag `vX.Y.Z`. | **prod** | Claude Code, only from `release/*` or `hotfix/*`, after Phú's UAT acceptance | Yes |
 | `develop` | Integration branch. Always deployable to UAT. | **uat** | Phú, from short-lived branches | Yes |
 
 Never commit directly to `main` or `develop`. Never force-push them. Never delete them.
@@ -122,7 +122,7 @@ While `release/0.2.0` is open:
 When UAT passes:
 
 ```bash
-# 4. Merge release → main with a MERGE COMMIT (Phú, in the GitHub UI or:)
+# 4. Merge release → main with a MERGE COMMIT (Claude Code, after Phú's UAT acceptance)
 gh pr merge <release-pr> --merge
 
 # 5. Tag main and publish the GitHub Release

@@ -48,7 +48,7 @@ Don't write one for choices fully covered by a convention doc or for routine lib
 ```mermaid
 stateDiagram-v2
   [*] --> Proposed: PR opened
-  Proposed --> Accepted: Phú merges
+  Proposed --> Accepted: PR merged
   Proposed --> Rejected: Phú closes (keep file, status Rejected)
   Accepted --> Superseded: newer ADR replaces it
   Accepted --> Deprecated: no longer relevant

@@ -57,13 +57,13 @@ Do not put the issue number in the title. Put `Closes #14` in the description.
 | PR contains | Primary reviewer | Additional required check |
 | --- | --- | --- |
 | UI by Antigravity | Claude Code (`/review-ag <pr>`) | — |
-| Backend / domain by Claude Code | Antigravity (`/verify-ui <pr>`) when the change is visible in the app | — |
-| `src/lib/domain/money/**`, month-close, views | Claude Code with the `money-logic-reviewer` subagent | Phú reads the test cases |
-| `supabase/migrations/**`, RLS, auth, API tokens | `money-logic-reviewer` subagent | Phú reviews the SQL |
-| Docs, ADRs, conventions | Phú | — |
-| `release/*`, `hotfix/*` | Phú (UAT acceptance on iPhone) | All CI green on the release branch |
+| Anything by Claude Code | Fresh-context reviewer subagent (always) | Antigravity `/verify-ui <pr>` when the change is visible in the app |
+| `src/lib/domain/money/**`, month-close, views | `money-logic-reviewer` subagent | Unclear business rules behind the tests go to Phú (`needs-decision`) |
+| `supabase/migrations/**`, RLS, auth, API tokens | `money-logic-reviewer` subagent | Destructive changes to real data: `needs-decision` |
+| Docs, ADRs, conventions | Fresh-context reviewer subagent | Rule changes summarised to Phú in chat |
+| `release/*`, `hotfix/*` | Phú: UAT acceptance on his iPhone | All CI green; Phú approves the production deployment |
 
-Phú is always the **final reviewer and the only person who merges**.
+**Claude Code merges** (tech lead, [ADR-0017](../adr/0017-claude-code-as-tech-lead.md)). It never merges its own PR without an independent reviewer's `APPROVE`.
 
 ### 5.2 How a review is posted
 
@@ -89,6 +89,7 @@ gh pr review 42 --comment --body-file review.md
 **Verdict:** REQUEST CHANGES (1 blocker).
 ```
 
+- Reviewer names in the header: `Claude Code`, `Antigravity`, `Reviewer subagent` (a fresh-context Claude reviewer that has not seen the author's session), or `money-logic-reviewer`.
 - Verdict is one of `APPROVE`, `APPROVE WITH NITS`, `REQUEST CHANGES`.
 - Severity: **blocker** (must fix before merge), **should** (fix now, or open a follow-up issue and link it), **nit** (optional).
 - Each finding gives `file:line`, the problem, and a concrete fix.
@@ -104,7 +105,7 @@ gh pr review 42 --comment --body-file review.md
 ### 5.4 Disagreements
 
 1. Both sides state their reasoning in the PR thread, under a comment starting with `### Disagreement`.
-2. Phú decides in the thread.
+2. Claude Code decides technical disagreements in the thread; business questions go to Phú (`needs-decision`).
 3. If the decision is a lasting rule, it becomes an ADR ([documentation §3](documentation.md#3-architecture-decision-records)).
 4. An agent never "wins" by overwriting the other's code.
 
@@ -145,4 +146,4 @@ Same labels as issues ([issues §3](issues.md#3-labels)). Additionally:
 | --- | --- |
 | `db:migration` | Contains a migration. Triggers extra review and the release-freeze rule. |
 | `do-not-merge` | Hard stop, with a comment explaining why. |
-| `needs-decision` | Waiting for Phú to decide something in the thread. |
+| `needs-decision` | Waiting for Phú: a business rule or information only he has. |

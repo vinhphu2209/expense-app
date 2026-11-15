@@ -16,5 +16,5 @@ argument-hint: [issue-number]
    - Test cases (list them)
    - Risks / questions for Phú
    Command: `gh issue comment <n> --body-file <tmp-plan.md>`.
-5. Summarise the plan to Phú in Vietnamese in chat, with the issue link.
-6. STOP and wait for Phú's `Plan approved`. Don't create the branch or write code yet.
+5. Summarise the plan to Phú in Vietnamese in chat in 2–4 lines, with the issue link (for information, not approval).
+6. If the plan has an open business question, label the issue `needs-decision`, ask Phú in chat and STOP. Otherwise move the card to *In progress* and start: create the branch and implement (you are the tech lead, ADR-0017).

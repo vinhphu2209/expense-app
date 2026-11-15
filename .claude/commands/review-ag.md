@@ -18,4 +18,5 @@ argument-hint: [pr-number, default = oldest ready PR labelled agent:antigravity]
 4. Optional: check it out in a temporary worktree and run it: `git worktree add ../expense-app-review origin/<head-branch>`, then `pnpm install && pnpm check`. Remove the worktree afterwards.
 5. Write the review in the fixed format from docs/conventions/pull-requests.md §5.2 (header `## Review — Claude Code — <VERDICT>`, numbered findings with severity and `file:line`). Post it with `gh pr review <n> --comment --body-file <tmp-review.md>`.
 6. Don't push to the PR branch.
-7. Summarise to Phú in Vietnamese: verdict, number of blockers, PR link.
+7. If the verdict is `APPROVE` / `APPROVE WITH NITS` and the merge rules are met, merge it with `/merge <pr>`. Otherwise wait for Antigravity's fixes and review again.
+8. Summarise to Phú in Vietnamese: verdict, merged or not, PR link.
