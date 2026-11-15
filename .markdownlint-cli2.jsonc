@@ -1,4 +1,4 @@
-// Docs lint config (docs/conventions/documentation.md). Wired into CI in P0-00b.
+// Docs lint config (docs/conventions/documentation.md). Runs in `pnpm check` and CI.
 {
   "config": {
     "default": true,
