@@ -5,7 +5,7 @@
     "MD013": false, // line length: prose is not hard-wrapped
     "MD033": false, // inline HTML (PR template comments)
     "MD041": false, // command/workflow files start with front matter
-    "MD024": { "siblings_only": true }
+    "MD024": { "siblings_only": true },
   },
-  "ignores": ["node_modules/**", ".next/**"]
+  "ignores": ["node_modules/**", ".next/**"],
 }

@@ -1,0 +1,6 @@
+# Docs are linted by markdownlint (.markdownlint-cli2.jsonc), not Prettier.
+**/*.md
+pnpm-lock.yaml
+.next/
+coverage/
+src/lib/db.types.ts
