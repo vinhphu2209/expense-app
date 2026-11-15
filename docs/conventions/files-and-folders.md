@@ -75,7 +75,7 @@ expense-app/
 | --- | --- | --- |
 | `supabase/**`, `src/lib/domain/**`, `src/server/**`, `src/app/api/**`, `src/lib/supabase/**`, `src/middleware.ts`, `src/env.ts` | Claude Code | Request changes in an issue or PR comment |
 | `src/app/(app)/**`, `src/app/(auth)/**` pages/layouts, `src/components/**`, `src/hooks/**`, `public/**`, `src/app/manifest.ts`, service worker, `tests/e2e/**`, `docs/screens/**` | Antigravity | Request changes |
-| `AGENTS.md`, `CLAUDE.md`, `.agents/rules/**`, `docs/plan.md`, `docs/adr/**`, `docs/conventions/**` | Phú | Propose changes in a PR; Phú merges |
+| `AGENTS.md`, `CLAUDE.md`, `.agents/rules/**`, `docs/plan.md`, `docs/adr/**`, `docs/conventions/**` | Shared ([ADR-0016](../adr/0016-agents-update-rules-via-prs.md)) | Update through a PR and call it out in *Review focus*; Phú merges |
 | `package.json`, lockfile, root config files, `.github/**` | Shared | Any change explained in the PR's *Changes* section |
 
 Security-sensitive code (`auth`, Supabase clients, middleware, `env.ts`) is owned by Claude Code, even when a UI task needs it.

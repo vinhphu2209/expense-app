@@ -1,6 +1,6 @@
 # AGENTS.md — Shared rules for all AI agents (Claude Code, Antigravity)
 
-Owner of this file: Phú (human). Agents must not edit it. Propose changes in a PR comment or an issue labelled `needs-decision`.
+Any agent may update this file through a PR when a rule or fact changes ([ADR-0016](docs/adr/0016-agents-update-rules-via-prs.md)); call it out in the PR's *Review focus*. Phú merges.
 This file is short on purpose: it points to the conventions instead of copying them ([documentation §5](docs/conventions/documentation.md#5-agent-context-files)).
 
 ## Project

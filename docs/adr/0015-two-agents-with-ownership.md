@@ -3,6 +3,7 @@
 - **Status:** Accepted
 - **Date:** 2026-11-15
 - **Deciders:** Phú
+- **Amended by:** [ADR-0016](0016-agents-update-rules-via-prs.md) (rules and docs are no longer reserved for Phú)
 - **Related:** [ai-workflow.md](../ai-workflow.md), [files & folders §1.1](../conventions/files-and-folders.md#11-ownership)
 
 ## Context
