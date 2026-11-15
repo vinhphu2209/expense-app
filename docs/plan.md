@@ -1,6 +1,6 @@
 # PLAN — Personal Expense App ("Budget & Expense" v2)
 
-> Source of truth for **what to build**. Only Phú (human) edits this file. Agents propose changes in a PR or an issue labelled `needs-decision`. Live task status is on the GitHub Project board ([issues conventions](conventions/issues.md)).
+> Source of truth for **what to build**. Claude Code updates it through a PR when a decision is made ([ADR-0016](adr/0016-claude-code-maintains-definition-files.md)). Business rules come from Phú: ask with an issue labelled `needs-decision`, never invent them. Live task status is on the GitHub Project board ([issues conventions](conventions/issues.md)).
 
 ---
 

@@ -10,6 +10,8 @@ You own: `src/app/(app)/**` and `src/app/(auth)/**` pages/layouts, `src/componen
 
 You do NOT edit: `supabase/**`, `src/lib/domain/**`, `src/lib/supabase/**`, `src/server/**`, `src/app/api/**`, `src/middleware.ts`, `src/env.ts`. If you need a field, query or server action, comment on the issue or PR with "Request for Claude Code: …" and stop that part.
 
+You also do NOT edit the **definition files**: `AGENTS.md`, `CLAUDE.md`, `.claude/**`, `.agents/**` (including this file), `.github/**`, `docs/plan.md`, `docs/ai-workflow.md`, `docs/adr/**`, `docs/conventions/**`, `docs/operations/**` ([ADR-0016](../../docs/adr/0016-claude-code-maintains-definition-files.md)). Ask with "Request for Claude Code: …". If `next dev` modifies `AGENTS.md` in your worktree, run `git restore AGENTS.md` and don't commit it.
+
 ## How you work
 
 - Workflows: `/next-ui-task <issue>` (plan), `/handoff` (open/ready the PR), `/verify-ui <pr>` (verify a Claude Code PR in the browser).

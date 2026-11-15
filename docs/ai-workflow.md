@@ -12,7 +12,7 @@
 3. **Agents communicate through GitHub, not memory:** plans are issue comments, handoffs are PR descriptions, reviews are PR review comments.
 4. **One branch per agent at a time**, one git worktree per agent.
 5. **Contract-first:** Claude Code merges types/Zod/server actions (`src/lib/domain/`) before Antigravity builds UI on them.
-6. **Only Phú** approves plans, merges, tags releases, and edits `AGENTS.md`, `docs/plan.md`, ADRs and conventions.
+6. **Phú** approves plans, answers `needs-decision` questions, merges every PR and tags releases. Only Claude Code edits the definition files (rules, plan, ADRs, conventions, `.github/`), through a PR ([ADR-0016](adr/0016-claude-code-maintains-definition-files.md)).
 7. **All written artifacts are in English.** Agents talk to Phú in Vietnamese in chat.
 
 ## 2. Roles
