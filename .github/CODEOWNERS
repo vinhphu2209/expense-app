@@ -1,0 +1,29 @@
+# CODEOWNERS — documents ownership by area (docs/conventions/files-and-folders.md §1.1).
+# Solo repo: every path is owned by the maintainer account. Agent ownership is
+# expressed in comments and enforced by the review process, not by GitHub.
+#
+
+*                               @vinhphu2209
+
+# Claude Code — database, domain, server, security
+/supabase/                      @vinhphu2209
+/src/lib/domain/                @vinhphu2209
+/src/lib/supabase/              @vinhphu2209
+/src/server/                    @vinhphu2209
+/src/app/api/                   @vinhphu2209
+/src/middleware.ts              @vinhphu2209
+/src/env.ts                     @vinhphu2209
+
+# Antigravity — UI, PWA, e2e
+/src/components/                @vinhphu2209
+/src/app/(app)/                 @vinhphu2209
+/public/                        @vinhphu2209
+/tests/e2e/                     @vinhphu2209
+
+# Phú only — rules, plan, decisions
+/AGENTS.md                      @vinhphu2209
+/CLAUDE.md                      @vinhphu2209
+/.agents/rules/                 @vinhphu2209
+/docs/plan.md                   @vinhphu2209
+/docs/adr/                      @vinhphu2209
+/docs/conventions/              @vinhphu2209

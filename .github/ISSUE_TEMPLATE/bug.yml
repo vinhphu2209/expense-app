@@ -1,0 +1,66 @@
+name: Bug
+description: Behaviour that differs from docs/plan.md or an acceptance criterion
+title: "[bug] "
+labels: ["type:bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Public repo:** do not paste real amounts, names, phone numbers or receipts. Reproduce with seed data.
+        Security issues: do NOT open an issue — see SECURITY.md.
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - dev (local)
+        - uat
+        - prod
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version / commit
+      placeholder: v0.2.0 or develop@abc1234
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      value: |
+        1.
+        2.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - critical — wrong money numbers or data loss (hotfix candidate)
+        - major — feature unusable
+        - minor — workaround exists
+        - cosmetic
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device / browser
+      placeholder: iPhone 15, iOS 26, installed PWA
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Screenshots / logs
