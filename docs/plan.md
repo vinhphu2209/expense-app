@@ -79,7 +79,7 @@ No bank accounts (D9). Money arriving from outside (salary into MoMo) is an `inc
 | Living Expenses | Food, Groceries, Transport | false | |
 | Incidental Expenses | Entertainment, Shopping, Beauty, Miscellaneous | false | |
 | Incidental Expenses | Health | **true** | Was renamed HealthFund → accumulates |
-| Investment - Saving | Emergency, Investment, Sinking, Wedding, Dating, Study | **true** | Accumulating funds, optional `target_amount` |
+| Investment - Saving | Emergency, Investment, Sinking, Wedding, Dating, Study | **true** | Accumulating funds, optional `target_amount` set by Phú in Settings (the sheet's note numbers are not targets, [#2](https://github.com/vinhphu2209/expense-app/issues/2)) |
 
 - `rollover = false`: gets a fresh budget each month; **leftover at month end goes through the Month-close rule**.
 - `rollover = true` (fund): leftover **carries over** → the envelope has a running **balance**. Spending from a fund (Dating, Study, Health) reduces its balance.
@@ -94,7 +94,7 @@ No bank accounts (D9). Money arriving from outside (salary into MoMo) is an `inc
 
 ### 3.4 Monthly budget
 
-Per month: `income_planned` (net) and, per envelope, `pct` + `assigned_amount`.
+Per month: `income_planned` = **Net income** ([#4](https://github.com/vinhphu2209/expense-app/issues/4)) and, per envelope, `pct` + `assigned_amount`.
 
 - Default `assigned_amount = round(income_planned * pct, -3)` (round to thousands).
 - Manual **override** allowed, but the UI must show an "overridden" badge (the November sheet had InvestmentFund at 10% but planned 4,218,000 — a silent mismatch).
@@ -112,9 +112,19 @@ Runs when the user taps **"Close month"**:
 
 Split ratios and destinations come from `settings`, never hard-coded. A month can only be closed once.
 
+**Emergency target** = 6 months of essential expenses ([#3](https://github.com/vinhphu2209/expense-app/issues/3)):
+
+```text
+emergency_target(month) = 6 × Σ assigned_amount of the envelopes in the "Fixed Expenses" and "Living Expenses" groups, for the month being closed
+```
+
+- Computed at close time, never stored as a fixed number. Emergency's own `target_amount` is not used.
+- Uses **planned** amounts (`assigned_amount`), not actual spending, so it works from the first month and stays stable within a month.
+- The multiplier (6) and the set of essential groups come from `settings` (referenced by group id, not name), never hard-coded.
+
 ### 3.6 Income: Gross → Net
 
-MVP: user enters **Net** (optionally Gross and BHXH salary, for reference). A Gross → Net calculator (BHXH, personal income tax, deductions) is Phase 4, with its own tests and a cited source for the rules.
+MVP: user enters **Net**, and the budget is always based on Net ([#4](https://github.com/vinhphu2209/expense-app/issues/4)). Gross and BHXH salary are optional, for reference only. A Gross → Net calculator (BHXH, personal income tax, deductions) is Phase 4, with its own tests and a cited source for the rules.
 
 ### 3.7 Audit trail
 
@@ -390,7 +400,7 @@ Goal: make logging happen *right after* paying in MoMo, without leaving the PWA-
 | P3-01 | Offline queue for Quick-add (save locally when offline, sync with `client_id`) | AG | Airplane mode → save → reconnect → exactly one row |
 | P3-02 | Quick-add deep link: `/add?amount=45000&envelope=food&note=...` prefills and focuses Save | AG | Works from a Home Screen bookmark and from Shortcuts "Open URL" |
 | P3-03 | Personal API token (S8) + `POST /api/ingest` (token auth, Zod-validated, idempotent by `client_id`, lands in Inbox if envelope missing) | CC | Same request twice → one row; revoked token → 401 |
-| P3-04 | **iOS Shortcut "Log expense"**: asks amount + picks envelope → calls `/api/ingest`. Document setup steps in `docs/guides/ios-shortcuts.md` | CC (API + doc) | Phú can log from the Shortcut / Siri / Action Button without opening the PWA |
+| P3-04 | **iOS Shortcut "Log expense"**: asks amount + picks envelope → calls `/api/ingest`. Document setup steps in `docs/guides/ios-shortcuts.md` | CC (API + doc) | Phú can log from the Shortcut / Siri / Home Screen icon / Back Tap without opening the PWA (no Action Button, [#5](https://github.com/vinhphu2209/expense-app/issues/5)) |
 | P3-05 | **iOS Personal Automation**: "When MoMo is closed" → run "Log expense" (or open the deep link). Documented, optional | CC (doc) | Documented with screenshots; Phú tests on device |
 | P3-06 | Receipt-screenshot flow (optional): Shortcut takes a MoMo receipt screenshot → "Extract Text from Image" → sends raw text to `/api/ingest` → server parses amount/recipient → Inbox | CC | Parser tested on ≥ 10 real (redacted) MoMo receipts |
 | P3-07 | Suggest envelope from `categorize_rules` + **Inbox UI** to confirm pending items, create a rule from one item | CC (logic) + AG (UI) | |
@@ -416,7 +426,8 @@ Goal: make logging happen *right after* paying in MoMo, without leaving the PWA-
    - `Emergency Fund`, `EmergencyFund` → Emergency
    - `Investment`, `InvestmentFund` → Investment
    - `Family`, `FamilyFund` → Family
-   - `ML` → **to decide** (see §9)
+   - `ML` → Dating ([#1](https://github.com/vinhphu2209/expense-app/issues/1)). Its September amounts are imported into Dating, so September totals still match the sheet.
+   - The numbers in the sheet's notes column are **not imported** ([#2](https://github.com/vinhphu2209/expense-app/issues/2)).
 3. Each month × envelope with Actual > 0 → one transaction `source=import`, `occurred_at` = last day of month, note "Imported from sheet".
 4. Budget lines from the Allocation % / Planned columns.
 5. Fund opening balances: **Phú enters actual current balances manually**.
@@ -433,10 +444,10 @@ The canonical checklist lives in [pull requests §7](conventions/pull-requests.m
 
 Each question becomes an issue labelled `needs-decision`. Product rules are answered in this file; decisions with lasting architectural impact also get an ADR.
 
-1. What was the `ML` envelope (September)? Merge into Study or drop?
-2. The numbers in the sheet's notes column (15, 25, 100, 40, 20) — fund targets in millions VND? If yes → `target_amount`.
-3. Exact Emergency target (3 or 6 months of expenses → amount)?
-4. Which income drives the budget: actual Net, or "Net – full BHXH"? (November uses both.)
+1. ~~`ML` envelope~~ → merged into Dating via alias ([#1](https://github.com/vinhphu2209/expense-app/issues/1)).
+2. ~~Sheet note numbers as fund targets~~ → no meaning, not imported; targets are set in Settings ([#2](https://github.com/vinhphu2209/expense-app/issues/2)).
+3. ~~Emergency target~~ → 6 × planned Fixed + Living expenses of the month being closed (§3.5, [#3](https://github.com/vinhphu2209/expense-app/issues/3)).
+4. ~~Budget income~~ → Net ([#4](https://github.com/vinhphu2209/expense-app/issues/4)).
 5. ~~Primary phone~~ → iPhone ([ADR-0009](adr/0009-iphone-primary-device.md)).
 6. ~~Primary bank~~ → not tracked; MoMo only ([ADR-0010](adr/0010-track-momo-only.md)).
-7. Does the iPhone have an Action Button (iPhone 15 Pro or later)? If yes, bind the "Log expense" Shortcut to it.
+7. ~~Action Button~~ → no; use Siri, a Home Screen icon or Back Tap instead ([#5](https://github.com/vinhphu2209/expense-app/issues/5)).
