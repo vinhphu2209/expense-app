@@ -19,4 +19,5 @@ updates:
       interval: weekly
     commit-message:
       prefix: ci
+      include: scope
     labels: ["type:chore", "area:ci"]
