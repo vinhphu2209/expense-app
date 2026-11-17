@@ -3,3 +3,5 @@ allowBuilds:
   unrs-resolver: false
   # lefthook hooks are installed by the `prepare` script instead of its postinstall.
   lefthook: false
+  # Supabase CLI downloads its platform binary in postinstall.
+  supabase: true
