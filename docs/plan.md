@@ -134,6 +134,8 @@ Every update/delete of a transaction writes to `audit_log` (before/after JSON). 
 
 ## 4. Database schema (draft — Claude Code turns this into migrations)
 
+> **Status:** the core tables are implemented in `supabase/migrations/` (P0-03, #12) with RLS, same-user composite foreign keys and pgTAP tests. Differences from this draft: every child table has `user_id`; `audit_log` is written by a trigger; `envelope_movements` is insert-only. `settings.month_close_split` (keyed by envelope names, against ADR-0006) is replaced by an id-based design in P2-02 (#32). `debts`, `recurring_bills`, `quick_templates`, `transaction_splits`, `api_tokens` and `categorize_rules` are added by the tasks that use them. The migrations are the source of truth; this draft is kept for context.
+
 ```sql
 -- Money is BIGINT VND. All timestamps timestamptz. RLS on every table: user_id = auth.uid().
 
