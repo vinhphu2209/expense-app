@@ -134,6 +134,8 @@ Every update/delete of a transaction writes to `audit_log` (before/after JSON). 
 
 ## 4. Database schema (draft — Claude Code turns this into migrations)
 
+> **Status:** the core tables are implemented in `supabase/migrations/` (P0-03, #12) with RLS, same-user composite foreign keys and pgTAP tests. Differences from this draft: every child table has `user_id`; `audit_log` is written by a trigger; `envelope_movements` is insert-only. `settings.month_close_split` (keyed by envelope names, against ADR-0006) is replaced by an id-based design in P2-02 (#32). `debts`, `recurring_bills`, `quick_templates`, `transaction_splits`, `api_tokens` and `categorize_rules` are added by the tasks that use them. The migrations are the source of truth; this draft is kept for context.
+
 ```sql
 -- Money is BIGINT VND. All timestamps timestamptz. RLS on every table: user_id = auth.uid().
 
@@ -367,7 +369,7 @@ Owner key: **CC** = Claude Code (VS Code), **AG** = Antigravity, **P** = Phú. O
 | ID | Task | Owner | Acceptance criteria |
 | --- | --- | --- | --- |
 | P1-01 | Money utils: format VND; parse "45k" / "1tr2" / "1.250.000" → integer | CC | ≥ 15 unit test cases |
-| P1-02 | Server actions: create/update/soft-delete transaction + audit_log; idempotent by `client_id` | CC | Unit + integration tests; double submit → one row |
+| P1-02 | Server actions: create/update/soft-delete transaction (audit rows are written by trigger `trg_transactions_audit`); idempotent by `client_id` (`on conflict do nothing`) | CC | Unit + integration tests; double submit → one row |
 | P1-03 | **S1 Quick-add** | AG | Log one expense in ≤ 5 s and ≤ 3 taps after typing the amount, on iPhone |
 | P1-04 | Smart envelope chips (frequency + time of day) | CC (logic) + AG (UI) | `rankEnvelopes(history, now)` has tests |
 | P1-05 | **S2 Transactions** list + edit | AG | Filter by month/envelope; edits write audit |

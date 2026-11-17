@@ -10,8 +10,9 @@
 | --- | --- | --- |
 | Tables | snake_case, **plural** | `transactions`, `budget_lines` |
 | Columns | snake_case, singular | `occurred_at`, `envelope_id` |
-| Primary key | `id uuid default gen_random_uuid()` | |
+| Primary key | `id uuid default gen_random_uuid()`; pure link tables may use a composite key named `pk_<table>` | `pk_budget_lines` |
 | Foreign key column | `<singular_table>_id` | `account_id` |
+| Foreign key constraint | `fk_<table>_<referenced>` (composite same-user FKs) | `fk_transactions_account` |
 | Timestamps | `<verb>_at timestamptz` | `created_at`, `closed_at`, `deleted_at` |
 | Booleans | `is_` / `has_` prefix, or an adjective | `is_default`, `rollover` |
 | Money | `bigint`, name says what it is | `amount`, `target_amount`, `income_planned` |
@@ -32,7 +33,8 @@
 4. Money is `bigint`. Never `numeric`, `real`, `double precision` or `money`. Percentages may be `numeric(5,2)`.
 5. All timestamps are `timestamptz`. Month keys are `date` set to day 1, computed in `Asia/Ho_Chi_Minh`.
 6. Transactions are never hard-deleted: `deleted_at` + `audit_log` row ([ADR-0004](../adr/0004-money-as-integer-vnd.md) consequences, PLAN §3.7).
-7. `created_at default now()` on every table. `updated_at` is maintained by the shared trigger `trg_<table>_updated_at`.
+7. `created_at default now()` on every table. `updated_at` is maintained by the shared trigger `trg_<table>_updated_at` (which also pins `created_at`). Insert-only tables (`envelope_movements`, `audit_log`) have no `updated_at`.
+8. Secure defaults are set once in the first migration: `anon` gets nothing on new `public` objects, clients get no `TRUNCATE`/`REFERENCES`/`TRIGGER`, and new functions are executable by nobody until a migration grants `EXECUTE` explicitly. Tables that must never be deleted by clients also revoke `DELETE` (not only omit the policy).
 
 ## 3. Migration file template
 
@@ -88,7 +90,7 @@ commit;
 
 - Views: `create view ... with (security_invoker = true)`, so RLS of the querying user applies. Without it, a view runs as its owner and leaks other users' rows.
 - Every view filters `deleted_at is null` and excludes `status = 'pending'` from spending (PLAN §4).
-- Functions default to `security invoker`. `security definer` requires a comment explaining why, `set search_path = ''`, fully qualified names (`public.transactions`), and an explicit `auth.uid()` check inside.
+- Functions default to `security invoker`. `security definer` requires a comment explaining why, `set search_path = ''`, fully qualified names (`public.transactions`), and an explicit `auth.uid()` check inside. **Exception:** trigger functions that only copy `old`/`new` and take `user_id` from that row (e.g. `fn_audit_transaction`) have no `auth.uid()` check, because they must also run for service-role writes and cascades; their `EXECUTE` is revoked from clients.
 - Business rules that must be atomic (month close) are a pure TS function (tested) **plus** one Postgres function that applies the result in one transaction.
 
 ## 6. Seed data

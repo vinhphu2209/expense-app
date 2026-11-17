@@ -8,5 +8,6 @@ Process: [docs/conventions/documentation.md §4](docs/conventions/documentation.
 
 ### Added
 
+- Database schema for accounts, envelopes, budgets and transactions, with per-user data isolation and an audit trail of every transaction change.
 - Installable iPhone PWA support with Home Screen icon, full-screen standalone launch, and safe-area layout.
 - Engineering foundation: GitFlow conventions, ADRs 0001–0015, PR/issue templates, environment design.
