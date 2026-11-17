@@ -8,4 +8,5 @@ Process: [docs/conventions/documentation.md §4](docs/conventions/documentation.
 
 ### Added
 
+- Installable iPhone PWA support with Home Screen icon, full-screen standalone launch, and safe-area layout.
 - Engineering foundation: GitFlow conventions, ADRs 0001–0015, PR/issue templates, environment design.
