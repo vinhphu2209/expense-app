@@ -29,7 +29,9 @@ create policy "audit_log: select own rows" on public.audit_log
 
 -- SECURITY DEFINER because authenticated users have no insert privilege on audit_log.
 -- It only copies the row being changed (which already passed RLS) and takes user_id from that row,
--- so it cannot write audit rows for another user. Empty search_path + qualified names (database §5).
+-- so it cannot write audit rows for another user. No auth.uid() check on purpose: it must also audit
+-- service-role writes, where auth.uid() is null (database §5 exception for row-copying triggers).
+-- Empty search_path + qualified names.
 create function public.fn_audit_transaction()
 returns trigger
 language plpgsql
@@ -37,6 +39,17 @@ security definer
 set search_path = ''
 as $$
 begin
+  -- The owner is being deleted (auth.users cascade): their audit rows go too, so writing one more
+  -- would violate audit_log_user_id_fkey and abort the account deletion.
+  if tg_op = 'DELETE' and not exists (select 1 from auth.users u where u.id = old.user_id) then
+    return old;
+  end if;
+
+  -- No-op updates (only updated_at changed, e.g. a retried request) are not audited.
+  if tg_op = 'UPDATE' and (to_jsonb(old) - 'updated_at') = (to_jsonb(new) - 'updated_at') then
+    return new;
+  end if;
+
   if tg_op = 'UPDATE' then
     insert into public.audit_log (user_id, table_name, row_id, action, before, after)
     values (old.user_id, 'transactions', old.id, 'update', to_jsonb(old), to_jsonb(new));

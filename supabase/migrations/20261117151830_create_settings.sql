@@ -33,6 +33,8 @@ create trigger trg_settings_updated_at
 alter table public.settings enable row level security;
 revoke all on table public.settings from anon;
 revoke truncate, references, trigger on table public.settings from authenticated;
+-- One settings row per user for the account's lifetime: no client delete.
+revoke delete on table public.settings from authenticated;
 
 create policy "settings: select own rows" on public.settings
   for select to authenticated using ((select auth.uid()) = user_id);

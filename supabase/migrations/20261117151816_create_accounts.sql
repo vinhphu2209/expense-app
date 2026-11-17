@@ -19,9 +19,13 @@ create table public.accounts (
   -- Target of same-user composite foreign keys (database conventions §2.3).
   constraint uq_accounts_user_id_id unique (user_id, id),
   constraint ck_accounts_name_length check (length(btrim(name)) between 1 and 60),
-  -- Liabilities may start negative. Bounded to JS safe integers (code style §2).
+  -- Bounded to JS safe integers (code style §2).
   constraint ck_accounts_opening_balance_safe
-    check (opening_balance between -9007199254740991 and 9007199254740991)
+    check (opening_balance between -9007199254740991 and 9007199254740991),
+  -- Sign convention (plan §3.3): assets hold money (≥ 0); a liability's balance is the debt as a
+  -- negative number (≤ 0), e.g. Shopee Later −1,200,000.
+  constraint ck_accounts_opening_balance_sign
+    check ((type = 'asset' and opening_balance >= 0) or (type = 'liability' and opening_balance <= 0))
 );
 
 -- At most one default account (MoMo) per user.

@@ -62,6 +62,8 @@ alter table public.budget_lines enable row level security;
 
 revoke all on table public.budget_months, public.budget_lines from anon;
 revoke truncate, references, trigger on table public.budget_months, public.budget_lines from authenticated;
+-- Budget months are history: no delete privilege at all (clear 42501 instead of a silent no-op).
+revoke delete on table public.budget_months from authenticated;
 
 create policy "budget_months: select own rows" on public.budget_months
   for select to authenticated using ((select auth.uid()) = user_id);

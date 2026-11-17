@@ -45,6 +45,10 @@ create table public.transactions (
   constraint ck_transactions_expense_has_envelope
     check (type <> 'expense' or envelope_id is not null or status = 'pending'),
   constraint ck_transactions_pending_only_expense check (status = 'confirmed' or type = 'expense'),
+  -- Client-originated rows must carry an idempotency key (double submit, offline retry, Shortcut
+  -- retry → one row). Imports and system rows may omit it.
+  constraint ck_transactions_client_id_required
+    check (source not in ('quickadd', 'manual', 'shortcut') or client_id is not null),
   constraint ck_transactions_note_length check (note is null or length(note) <= 200),
   constraint ck_transactions_merchant_length check (merchant is null or length(merchant) <= 120)
 );
@@ -64,6 +68,8 @@ create trigger trg_transactions_updated_at
 alter table public.transactions enable row level security;
 revoke all on table public.transactions from anon;
 revoke truncate, references, trigger on table public.transactions from authenticated;
+-- Never hard-deleted by clients: no delete privilege at all (soft delete via deleted_at).
+revoke delete on table public.transactions from authenticated;
 
 create policy "transactions: select own rows" on public.transactions
   for select to authenticated using ((select auth.uid()) = user_id);
