@@ -1,7 +1,7 @@
 -- Audit trail and no hard deletes for transactions (#12, plan §3.7).
 begin;
 
-select plan(10);
+select plan(12);
 
 insert into auth.users (id, email) values
   ('11111111-1111-1111-1111-111111111111', 'a@example.test'),
@@ -13,9 +13,9 @@ insert into public.envelope_groups (id, user_id, name) values
 insert into public.envelopes (id, user_id, group_id, name) values
   ('a0000000-0000-0000-0000-000000000003', '11111111-1111-1111-1111-111111111111',
    'a0000000-0000-0000-0000-000000000002', 'Food');
-insert into public.transactions (id, user_id, type, amount, account_id, envelope_id, note) values
+insert into public.transactions (id, user_id, type, amount, account_id, envelope_id, note, client_id) values
   ('a0000000-0000-0000-0000-000000000005', '11111111-1111-1111-1111-111111111111', 'expense', 45000,
-   'a0000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000003', 'pho');
+   'a0000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000003', 'pho', gen_random_uuid());
 
 -- Act as user A.
 set local role authenticated;
@@ -39,6 +39,13 @@ select is(
   45000::bigint, 'money is preserved exactly in the audit snapshot'
 );
 
+-- A no-op update (e.g. a retried request) is not audited.
+update public.transactions set note = note where id = 'a0000000-0000-0000-0000-000000000005';
+select is(
+  (select count(*) from public.audit_log where row_id = 'a0000000-0000-0000-0000-000000000005'),
+  1::bigint, 'an update that changes nothing is not audited'
+);
+
 -- Soft delete is an update and is audited too.
 update public.transactions set deleted_at = now() where id = 'a0000000-0000-0000-0000-000000000005';
 select is(
@@ -47,11 +54,14 @@ select is(
   1::bigint, 'a soft delete is audited'
 );
 
--- Hard delete has no policy: it removes nothing.
-delete from public.transactions where id = 'a0000000-0000-0000-0000-000000000005';
+-- Clients have no delete privilege on transactions.
+select throws_ok(
+  $$ delete from public.transactions where id = 'a0000000-0000-0000-0000-000000000005' $$,
+  '42501', null, 'a client cannot hard-delete a transaction'
+);
 select isnt_empty(
   $$ select 1 from public.transactions where id = 'a0000000-0000-0000-0000-000000000005' $$,
-  'a client cannot hard-delete a transaction'
+  'the transaction still exists'
 );
 
 select throws_ok(
@@ -79,7 +89,7 @@ select is(
 );
 select is(
   (select count(*) from public.audit_log where row_id = 'a0000000-0000-0000-0000-000000000005'),
-  3::bigint, 'two updates and one delete were audited'
+  3::bigint, 'two real updates and one delete were audited'
 );
 
 select * from finish();

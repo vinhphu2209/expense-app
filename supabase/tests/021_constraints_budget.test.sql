@@ -1,7 +1,7 @@
 -- Budget check constraints (#12, plan §3.4).
 begin;
 
-select plan(7);
+select plan(12);
 
 insert into auth.users (id, email) values ('11111111-1111-1111-1111-111111111111', 'a@example.test');
 insert into public.envelope_groups (id, user_id, name) values
@@ -26,6 +26,16 @@ select throws_like(
   '%ck_budget_months_income_planned_safe%', 'planned income cannot be negative'
 );
 select throws_like(
+  $$ insert into public.budget_months (user_id, month, income_gross)
+     values ('11111111-1111-1111-1111-111111111111', '2026-12-01', 9007199254740992) $$,
+  '%ck_budget_months_income_gross_safe%', 'gross income is bounded to a JS safe integer'
+);
+select throws_like(
+  $$ insert into public.budget_months (user_id, month, bhxh_salary)
+     values ('11111111-1111-1111-1111-111111111111', '2026-12-01', -1) $$,
+  '%ck_budget_months_bhxh_salary_safe%', 'BHXH salary cannot be negative'
+);
+select throws_like(
   $$ insert into public.budget_lines (budget_month_id, envelope_id, user_id, pct)
      values ('a0000000-0000-0000-0000-000000000004', 'a0000000-0000-0000-0000-000000000003',
              '11111111-1111-1111-1111-111111111111', 100.01) $$,
@@ -43,11 +53,30 @@ select throws_like(
              '11111111-1111-1111-1111-111111111111', -1000) $$,
   '%ck_budget_lines_assigned_amount_safe%', 'assigned amount cannot be negative'
 );
+select throws_like(
+  format(
+    $$ insert into public.budget_lines (budget_month_id, envelope_id, user_id, note)
+       values ('a0000000-0000-0000-0000-000000000004', 'a0000000-0000-0000-0000-000000000003',
+               '11111111-1111-1111-1111-111111111111', %L) $$,
+    repeat('x', 201)
+  ),
+  '%ck_budget_lines_note_length%', 'a budget line note is at most 200 characters'
+);
 select lives_ok(
   $$ insert into public.budget_lines (budget_month_id, envelope_id, user_id, pct, assigned_amount, is_override)
      values ('a0000000-0000-0000-0000-000000000004', 'a0000000-0000-0000-0000-000000000003',
              '11111111-1111-1111-1111-111111111111', 12.50, 1250000, false) $$,
   'a valid budget line is accepted'
+);
+select throws_like(
+  $$ update public.budget_lines set assigned_amount = 9007199254740992
+      where budget_month_id = 'a0000000-0000-0000-0000-000000000004' $$,
+  '%ck_budget_lines_assigned_amount_safe%', 'assigned amount above 2^53 - 1 is rejected'
+);
+select lives_ok(
+  $$ update public.budget_lines set assigned_amount = 9007199254740991
+      where budget_month_id = 'a0000000-0000-0000-0000-000000000004' $$,
+  'assigned amount of exactly 2^53 - 1 is accepted'
 );
 
 select * from finish();
