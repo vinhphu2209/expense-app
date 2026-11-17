@@ -46,8 +46,8 @@ All variables are validated at startup by `src/env.ts`. Where each value lives:
 | Variable | Exposed to browser | dev | uat | prod |
 | --- | --- | --- | --- | --- |
 | `NEXT_PUBLIC_SUPABASE_URL` | yes | `.env.local` | Vercel *Preview* | Vercel *Production* |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | yes (RLS protects data) | `.env.local` | Vercel *Preview* | Vercel *Production* |
-| `SUPABASE_SERVICE_ROLE_KEY` | **no** | `.env.local` | Vercel *Preview* | Vercel *Production* |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (`sb_publishable_…`) | yes (RLS protects data) | `.env.local` | Vercel *Preview* | Vercel *Production* |
+| `SUPABASE_SECRET_KEY` (`sb_secret_…`, bypasses RLS) | **no** | `.env.local` | Vercel *Preview* | Vercel *Production* |
 | `NEXT_PUBLIC_APP_ENV` | yes | `development` | `uat` | `production` |
 | `SUPABASE_ACCESS_TOKEN` (CLI) | **no** | — | GitHub Environment `uat` | GitHub Environment `production` |
 | `SUPABASE_DB_PASSWORD` | **no** | — | GitHub Environment `uat` | GitHub Environment `production` |
@@ -66,7 +66,7 @@ GitHub Actions owns deployment order (database first, then app). Vercel's automa
 
 | Workflow | Trigger | Steps |
 | --- | --- | --- |
-| `ci.yml` | every PR, push to `develop`/`main` | Job `check`: install → `pnpm check` (typecheck, lint, format, markdownlint, unit) → build. Added later: start Supabase → pgTAP + integration (P0-02), e2e on WebKit iPhone (P1-10) |
+| `ci.yml` | every PR, push to `develop`/`main` | Job `check`: install → `pnpm check` (typecheck, lint, format, markdownlint, unit) → build (placeholder Supabase env). Job `db`: start Supabase (DB, auth, API) → `db:reset` → pgTAP (`db:test`) → `db:types:check` (generated types match the schema). Added later: integration tests (P1-02), e2e on WebKit iPhone (P1-10) |
 | `pr-title.yml` | PR opened, edited, synchronized | commitlint on the PR title (re-runs on title edits) |
 | `deploy-uat.yml` | push to `develop`, `release/**`, `hotfix/**` | environment `uat` → `supabase db push` to `expense-uat` (Vercel deploys the preview itself) |
 | `deploy-prod.yml` | push tag `v*` | environment `production` (**requires Phú's approval**) → encrypted backup → `supabase db push` to `expense-prod` → `vercel deploy --prod` → smoke test |

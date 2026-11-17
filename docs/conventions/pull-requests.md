@@ -114,7 +114,7 @@ gh pr review 42 --comment --body-file review.md
 
 A PR may be merged only when **all** of these are true:
 
-- [ ] CI is green: the required checks `check` and `pr-title` (plus e2e for UI changes once it exists, #30).
+- [ ] CI is green: the required checks `check`, `db` and `pr-title` (plus e2e for UI changes once it exists, #30).
 - [ ] For **each** required reviewer in §5.1, that reviewer's **latest** verdict is `APPROVE` or `APPROVE WITH NITS`, and no required reviewer is the PR's author agent. (Conflict-free back-merges are exempt.)
 - [ ] Every `blocker` and `should` finding has a reply.
 - [ ] All conversations are resolved.

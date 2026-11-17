@@ -9,7 +9,7 @@ You are the tech lead (docs/adr/0017-claude-code-as-tech-lead.md). Merge PR `$AR
 2. Classify it. It is a **back-merge** if the head is `main` or `chore/back-merge-*` and the base is `develop` or `release/*`. Check this first, because back-merge branches would otherwise look like short-lived branches.
 3. Check the rules of §6:
    - [ ] Open, not draft, `mergeable` is `MERGEABLE`.
-   - [ ] CI is green: the required checks `check` and `pr-title` pass (`gh pr checks $ARGUMENTS`).
+   - [ ] CI is green: the required checks `check`, `db` and `pr-title` pass (`gh pr checks $ARGUMENTS`).
    - [ ] For **each** required reviewer in §5.1 (reviewer subagent; `money-logic-reviewer` for money/DB/migrations; Antigravity when the change is visible in the app), that reviewer's **latest** `## Review — <reviewer> — <VERDICT>` comment is `APPROVE` or `APPROVE WITH NITS`, and no required reviewer is the author agent. A conflict-free back-merge is exempt.
    - [ ] Every `blocker` and `should` finding has a reply (`Fixed in …`, `Won't fix: …` or `Follow-up: #…`).
    - [ ] All conversations are resolved. Check with GraphQL. Every `isResolved` must be `true` (an empty list is fine):
