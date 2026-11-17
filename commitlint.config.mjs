@@ -26,10 +26,17 @@ const scopes = [
 
 // Dependabot always writes "Bump" with a capital B, which fails `subject-case`, and it cannot be
 // configured. Skip only its exact generated headers (scope fixed in .github/dependabot.yml):
-//   build(deps): Bump <pkg> from <x> to <y>    build(deps): Bump the <group> group with <n> updates
-//   ci(deps): Bump <action> from <x> to <y>
-const dependabotHeader =
-  /^(build|ci)\(deps\): Bump (\S+ from \S+ to \S+|the \S+ group( across \d+ directories?)? with \d+ updates?)( in \S+)?$/;
+//   Bump <pkg> from <x> to <y>[ in the <group> group][ across <n> director(y|ies)][ in <dir>]
+//   Bump the <group> group[ in <dir>][ across <n> director(y|ies)] with <n> update(s)
+//   Bump <a>[, <b>] and <c>[ in <dir>]
+const across = String.raw`( across \d+ director(?:y|ies))?`;
+const dependabotHeader = new RegExp(
+  String.raw`^(build|ci)\(deps\): Bump (` +
+    String.raw`\S+ from \S+ to \S+( in the \S+ group)?${across}( in \S+)?` +
+    String.raw`|the \S+ group( in \S+)?${across} with \d+ updates?` +
+    String.raw`|\S+(, \S+)* and \S+( in \S+)?` +
+    ")$",
+);
 
 /** @type {import("@commitlint/types").UserConfig} */
 const config = {
