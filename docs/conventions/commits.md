@@ -55,7 +55,7 @@ Pick exactly one from this list. To add a scope, change this file in a `docs/` P
 | `ui` | Shared components, design tokens, layout shell |
 | `e2e` | Playwright tests and fixtures |
 | `ci` | Workflows, repo automation |
-| `deps` | Dependency updates (Dependabot uses this) |
+| `deps` | Dependency updates. Dependabot uses it (`build(deps): Bump …`, `ci(deps): Bump …`); its capitalized "Bump" headers are the one exception to the lowercase rule, allowed by `commitlint.config.mjs` |
 | `docs` | General documentation |
 | `adr` | Architecture Decision Records |
 | `release` | Version bumps, changelog, back-merges |
