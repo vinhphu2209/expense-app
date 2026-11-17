@@ -1,0 +1,19 @@
+# Local git hooks (installed by `pnpm install` through the `prepare` script).
+# CI runs the same checks, so hooks are a fast first line, not the gate.
+commit-msg:
+  commands:
+    commitlint:
+      run: pnpm exec commitlint --edit {1}
+
+pre-commit:
+  parallel: true
+  commands:
+    eslint:
+      glob: "*.{ts,tsx,js,mjs,cjs}"
+      run: pnpm exec eslint --max-warnings=0 --no-warn-ignored {staged_files}
+    prettier:
+      glob: "*.{ts,tsx,js,mjs,cjs,json,jsonc,css,yml,yaml}"
+      run: pnpm exec prettier --check {staged_files}
+    markdownlint:
+      glob: "*.md"
+      run: pnpm exec markdownlint-cli2 {staged_files}

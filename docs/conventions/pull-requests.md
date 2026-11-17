@@ -17,7 +17,7 @@ Every change to `develop`, `release/*` and `main` goes through a pull request. T
 
 ## 2. Title
 
-The title **is** the squash commit message, so it must be a valid Conventional Commit header ([commits §1](commits.md#1-format)). CI job `ci / pr-title` enforces this.
+The title **is** the squash commit message, so it must be a valid Conventional Commit header ([commits §1](commits.md#1-format)). The required check `pr-title` (`.github/workflows/pr-title.yml`) enforces this and re-runs when the title is edited.
 
 ```text
 feat(quickadd): add S1 quick-add screen
@@ -114,7 +114,7 @@ gh pr review 42 --comment --body-file review.md
 
 A PR may be merged only when **all** of these are true:
 
-- [ ] CI is green (`ci / check`, `ci / pr-title`, and `ci / e2e` for UI changes). Until CI exists (P0-00b), `pnpm check` is run on the PR head locally and the result is stated in a PR comment.
+- [ ] CI is green: the required checks `check` and `pr-title` (plus e2e for UI changes once it exists, #30).
 - [ ] For **each** required reviewer in §5.1, that reviewer's **latest** verdict is `APPROVE` or `APPROVE WITH NITS`, and no required reviewer is the PR's author agent. (Conflict-free back-merges are exempt.)
 - [ ] Every `blocker` and `should` finding has a reply.
 - [ ] All conversations are resolved.

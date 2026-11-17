@@ -205,6 +205,6 @@ Configured in GitHub → Settings (record any change in the ADR log). Current st
 - **Ruleset `develop`:** require PR (all review threads resolved); block force pushes and deletion; allowed merge methods = squash, merge commit (merge commit only for back-merges, by convention).
 - **Ruleset `release and hotfix`** (`release/**`, `hotfix/**`): block force pushes. Direct pushes are allowed so the version-bump commit can be made on the branch; fixes still arrive through `bugfix/` PRs by convention.
 - **Tag ruleset `version tags`** (`v*`): creation, update and deletion blocked for everyone except repository admins (Phú).
-- **Required status checks:** none yet. `ci / check` and `ci / pr-title` are added to the `main` and `develop` rulesets in P0-00b, when the CI workflow exists.
+- **Required status checks:** `check` (workflow `ci.yml`) and `pr-title` (workflow `pr-title.yml`), GitHub Actions, on the `main` and `develop` rulesets, added in P0-00b (#9). New CI jobs that must gate merges are added to the rulesets in the PR that creates them.
 - **Security:** secret scanning, push protection, Dependabot alerts + security updates, private vulnerability reporting: on.
 - **Required approvals: 0.** This is a solo repo: GitHub does not let an author approve their own PR, and both agents act through Phú's account. Review is enforced by the process in [pull-requests.md](pull-requests.md#5-review-process) instead.

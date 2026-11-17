@@ -9,8 +9,10 @@ updates:
       minor-and-patch:
         update-types: [minor, patch]
     commit-message:
-      prefix: build
-      include: scope
+      # Dependabot adds the colon; scope is fixed to `deps` (commitlint has no `deps-dev`).
+      # It capitalizes "Bump", so commitlint.config.mjs ignores exactly these generated headers.
+      prefix: "build(deps)"
+      prefix-development: "build(deps)"
     labels: ["type:chore", "area:ci"]
   - package-ecosystem: github-actions
     directory: /
@@ -18,5 +20,5 @@ updates:
     schedule:
       interval: weekly
     commit-message:
-      prefix: ci
+      prefix: "ci(deps)"
     labels: ["type:chore", "area:ci"]

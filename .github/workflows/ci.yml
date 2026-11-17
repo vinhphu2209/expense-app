@@ -1,0 +1,34 @@
+# Quality gate for every PR and for pushes to develop/main.
+# Required status checks (rulesets on main/develop): `check` (this file), `pr-title` (pr-title.yml).
+# Later jobs: pgTAP + integration with local Supabase (P0-02, #10), Playwright e2e (P1-10, #30).
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [develop, main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  # Cancel superseded PR runs only; every push to develop/main keeps its own result.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  check:
+    name: check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1 (version from packageManager)
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: pnpm check (typecheck, lint, format, markdownlint, unit tests)
+        run: pnpm check
+      - run: pnpm build
