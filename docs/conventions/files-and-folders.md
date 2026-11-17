@@ -106,7 +106,7 @@ Security-sensitive code (`auth`, Supabase clients, middleware, `env.ts`) is owne
 | ADRs | `NNNN-<kebab-title>.md` | `0004-money-as-integer-vnd.md` |
 | Screenshots | `docs/screens/<plan-id>-<screen>-<state>.png` | `P1-03-quick-add-empty.png` |
 | Icons | `public/icons/icon-<size>.png`, `apple-touch-icon.png` | `icon-512.png` |
-| Env vars | `SCREAMING_SNAKE_CASE`; `NEXT_PUBLIC_` **only** for values safe in the browser | `SUPABASE_SERVICE_ROLE_KEY` |
+| Env vars | `SCREAMING_SNAKE_CASE`; `NEXT_PUBLIC_` **only** for values safe in the browser | `SUPABASE_SECRET_KEY` |
 
 General rules:
 

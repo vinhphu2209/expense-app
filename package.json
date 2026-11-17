@@ -18,6 +18,13 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
+    "db:start": "supabase start",
+    "db:stop": "supabase stop",
+    "db:status": "supabase status",
+    "db:reset": "supabase db reset",
+    "db:test": "supabase test db",
+    "db:types": "supabase gen types typescript --local > src/lib/db.types.ts",
+    "db:types:check": "pnpm db:types && git diff --exit-code -- src/lib/db.types.ts",
     "check": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm lint:md && pnpm test",
     "prepare": "lefthook install || exit 0"
   },
@@ -49,6 +56,7 @@
     "markdownlint-cli2": "^0.24.1",
     "prettier": "^3.10.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "supabase": "^3.1.0",
     "tailwindcss": "4.3.3",
     "typescript": "^5",
     "vitest": "^5.1.0"
