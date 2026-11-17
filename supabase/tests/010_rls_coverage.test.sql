@@ -2,7 +2,7 @@
 -- privileges and check constraints, so a missing, extra or over-permissive one fails CI.
 begin;
 
-select plan(19);
+select plan(21);
 
 select tables_are(
   'public',
@@ -69,10 +69,28 @@ select is(
   (select coalesce(array_agg(c.relname::text order by c.relname), '{}')
      from pg_class c join pg_namespace n on n.oid = c.relnamespace
     where n.nspname = 'public' and c.relkind = 'S'
-      and (has_sequence_privilege('anon', c.oid, 'usage') or has_sequence_privilege('anon', c.oid, 'select'))),
+      and (has_sequence_privilege('anon', c.oid, 'usage') or has_sequence_privilege('anon', c.oid, 'select')
+           or has_sequence_privilege('authenticated', c.oid, 'update'))),
   '{}'::text[],
-  'anon cannot use any sequence in public'
+  'anon cannot use, and clients cannot setval, any sequence in public'
 );
+
+-- Default privileges, tested on fresh objects (existing objects revoke explicitly, so only new
+-- ones prove the defaults): a new function and a new table must not be reachable by clients.
+create function public.zz_default_privileges_probe() returns integer language sql as 'select 1';
+create table public.zz_default_privileges_probe (id integer);
+select ok(
+  not has_function_privilege('anon', 'public.zz_default_privileges_probe()', 'execute')
+    and not has_function_privilege('authenticated', 'public.zz_default_privileges_probe()', 'execute'),
+  'a newly created function is executable by no client until a migration grants it'
+);
+select ok(
+  not has_table_privilege('anon', 'public.zz_default_privileges_probe', 'select')
+    and not has_table_privilege('authenticated', 'public.zz_default_privileges_probe', 'truncate'),
+  'a newly created table gives anon nothing and clients no truncate'
+);
+drop table public.zz_default_privileges_probe;
+drop function public.zz_default_privileges_probe();
 
 select is(
   (select coalesce(array_agg(p.proname::text order by p.proname), '{}')

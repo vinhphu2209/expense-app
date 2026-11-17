@@ -23,6 +23,8 @@ create index idx_audit_log_user_id_table_name_row_id on public.audit_log (user_i
 alter table public.audit_log enable row level security;
 revoke all on table public.audit_log from anon;
 revoke insert, update, delete, truncate, references, trigger on table public.audit_log from authenticated;
+-- Only the security-definer trigger writes audit rows; clients must not touch (or setval) the id sequence.
+revoke all on sequence public.audit_log_id_seq from anon, authenticated;
 
 create policy "audit_log: select own rows" on public.audit_log
   for select to authenticated using ((select auth.uid()) = user_id);

@@ -14,8 +14,11 @@ alter default privileges for role postgres in schema public revoke all on sequen
 alter default privileges for role postgres in schema public revoke all on functions from anon;
 alter default privileges for role postgres in schema public
   revoke truncate, references, trigger on tables from authenticated;
-alter default privileges for role postgres in schema public revoke execute on functions from public;
 alter default privileges for role postgres in schema public revoke execute on functions from authenticated;
+alter default privileges for role postgres in schema public revoke update on sequences from authenticated;
+-- EXECUTE for PUBLIC is a *global* default; per-schema defaults can only add to it, so it must be
+-- revoked globally (no `in schema`) or every new function stays callable by anon via PUBLIC.
+alter default privileges for role postgres revoke execute on functions from public;
 
 create type public.account_type as enum ('asset', 'liability');
 create type public.txn_type as enum ('expense', 'income', 'transfer');
